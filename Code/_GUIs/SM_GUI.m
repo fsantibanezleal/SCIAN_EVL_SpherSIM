@@ -63,7 +63,7 @@ handles.embryoData.embryo.radius = 1000;
 handles.embryoData.layerDFC.nDFCs = 24;
 % Mean radial size for initialize DFCs, in radians
 handles.embryoData.layerDFC.radialSize   = pi/64;%((pi/2)/(nDFCs/2))/2;
-handles.embryoData.layerDFC.nVertexsDFC  = 20;
+handles.embryoData.layerDFC.nVertexsDFC  = 200;
 handles.embryoData.layerDFC.minAzimuth   = -3*pi/4;%- pi/4;
 handles.embryoData.layerDFC.maxAzimuth   = ...
                 handles.embryoData.layerDFC.minAzimuth...

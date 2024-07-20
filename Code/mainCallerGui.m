@@ -1,4 +1,11 @@
 %% FASL 2013-2014
+
+addpath('_Creation\');
+addpath('_Draws\');
+addpath('_GUIs\');
+addpath('_Physics\');
+addpath('_Geometric\');
+
 %  fsantibanezleal@ug.uchile.cl
 %  fsantibanez@med.uchile.cl
 %% Basic simulation enviroment for cell migration
@@ -15,13 +22,6 @@
 clear all
 close all
 clc
-
-addpath('_Creation\');
-addpath('_Draws\');
-addpath('_GUIs\');
-addpath('_Physics\');
-addpath('_Geometric\');
-
 %% Request for Gui    
 hGUI = SM_GUI;
     

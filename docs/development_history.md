@@ -49,6 +49,55 @@ The original MATLAB scripts and GUIDE `.fig`/`.m` files are preserved in the `le
 
 ---
 
+## v2.1.0 (2026-03-26)
+
+### Algorithmic Improvements
+
+#### Great-Circle Collision Detection (Bug Fix)
+Replaced flat angular distance approximation with the Haversine formula:
+
+```
+d = 2 * arcsin(sqrt(sin²(Δφ/2) + cos(φ₁) * cos(φ₂) * sin²(Δλ/2)))
+```
+
+This provides exact geodesic distance on the sphere, correcting errors
+near poles and at large angular separations.
+
+#### Persistent Random Walk Migration
+Cells maintain directional bias for τ ∈ [8, 25] steps before stochastic
+reorientation, modeling filopodial persistence:
+
+```
+v = v_EVL + α * (cos(θ_bias), sin(θ_bias)) + σ * ξ
+```
+
+where α = 0.3 * |v_EVL| and ξ ~ N(0, 1).
+
+#### Differential Adhesion (Steinberg, 1963)
+Cell-cell adhesion follows:
+
+```
+F_adh = s * (d - d_contact) / (d_max - d_contact) * d_hat
+```
+
+for d_contact < d < d_max, creating cohesive cell clusters.
+
+#### Dynamic Cell Deformation (Fourier Modes)
+Cell contours are perturbed by low-frequency Fourier modes k = 2,3,4,5:
+
+```
+R(θ) = R_base * (1 + ε * Σ_k cos(k*θ + φ_k(t)))
+```
+
+with time-varying phases φ_k(t) creating membrane fluctuations.
+
+### Frontend Improvements
+- Help modal with interactive usage guide
+- Tooltips on all parameter controls
+- Section-level expandable help text
+
+---
+
 ## Roadmap
 
 Potential future enhancements under consideration:

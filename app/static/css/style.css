@@ -181,6 +181,151 @@ button:disabled {
     height: 100%;
 }
 
+/* ---- Help button (header) ---- */
+.help-btn {
+    margin-left: auto;
+    width: 28px;
+    height: 28px;
+    padding: 0;
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 28px;
+    text-align: center;
+    border-radius: 50%;
+    background: var(--accent-dim);
+    border: 1px solid var(--accent);
+    color: var(--accent-hover);
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+.help-btn:hover {
+    background: var(--accent);
+    color: #fff;
+}
+
+/* ---- Help modal ---- */
+.modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    background: rgba(0, 0, 0, 0.65);
+    align-items: center;
+    justify-content: center;
+}
+
+.modal.modal-visible {
+    display: flex;
+}
+
+.modal-content {
+    background: var(--bg-panel);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 28px 32px;
+    max-width: 600px;
+    width: 90%;
+    max-height: 80vh;
+    overflow-y: auto;
+    position: relative;
+    color: var(--text-primary);
+}
+
+.modal-content h2 {
+    font-size: 18px;
+    margin-bottom: 16px;
+    color: var(--accent-hover);
+}
+
+.modal-content h3 {
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--accent);
+    margin-top: 18px;
+    margin-bottom: 8px;
+}
+
+.modal-content p,
+.modal-content li {
+    font-size: 13px;
+    line-height: 1.5;
+    color: var(--text-secondary);
+}
+
+.modal-content ol,
+.modal-content ul {
+    padding-left: 20px;
+    margin-bottom: 8px;
+}
+
+.modal-content li {
+    margin-bottom: 4px;
+}
+
+.modal-close {
+    position: absolute;
+    top: 12px;
+    right: 16px;
+    font-size: 22px;
+    color: var(--text-secondary);
+    cursor: pointer;
+    line-height: 1;
+}
+
+.modal-close:hover {
+    color: var(--text-primary);
+}
+
+/* ---- Section header with inline help icon ---- */
+.section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.section-header h2 {
+    margin-bottom: 0;
+}
+
+.help-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 18px;
+    height: 18px;
+    font-size: 11px;
+    font-weight: 700;
+    border-radius: 50%;
+    background: var(--accent-dim);
+    border: 1px solid var(--border);
+    color: var(--text-secondary);
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: background 0.15s, color 0.15s;
+}
+
+.help-icon:hover,
+.help-icon.help-icon-active {
+    background: var(--accent);
+    color: #fff;
+    border-color: var(--accent);
+}
+
+/* ---- Expandable help text ---- */
+.help-text {
+    font-size: 11px;
+    line-height: 1.5;
+    color: var(--text-secondary);
+    background: var(--bg-panel);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 8px 10px;
+    margin-bottom: 10px;
+}
+
 /* ---- Scrollbar ---- */
 ::-webkit-scrollbar {
     width: 6px;

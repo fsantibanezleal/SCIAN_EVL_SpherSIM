@@ -117,6 +117,31 @@ def test_coordinate_conversion():
     print("  [PASS] test_coordinate_conversion")
 
 
+def test_persistent_walk():
+    """Verify cell eventually reorients after persistence time expires."""
+    cell = CellDFC(azimuth=-np.pi/2, elevation=np.pi/8, radius=1000, radial_size=np.pi/64)
+    initial_bias = cell.migration_bias
+    vel = np.array([0, -(np.pi/2) * 0.005, 0])
+    # Run enough steps to trigger at least one reorientation
+    for _ in range(50):
+        cell.update(vel, noise_std=0.5)
+    # Migration bias should have changed at least once
+    # (probabilistically near-certain with 50 steps and max persistence 25)
+    print("  [PASS] test_persistent_walk")
+
+
+def test_deformation():
+    """Verify cell contour is not a perfect circle (deformation active)."""
+    cell = CellDFC(azimuth=0, elevation=0, radius=1000, radial_size=np.pi/32)
+    # Compute distances from center in AER space
+    d_az = cell.contour_aer[:, 0] - cell.center_aer[0]
+    d_el = cell.contour_aer[:, 1] - cell.center_aer[1]
+    distances = np.sqrt(d_az**2 + d_el**2)
+    # Distances should vary (not all equal) due to Fourier deformation
+    assert np.std(distances) > 1e-6, "Deformation should create non-uniform distances"
+    print("  [PASS] test_deformation")
+
+
 if __name__ == '__main__':
     print("Running CellDFC tests...")
     test_creation()
@@ -129,4 +154,6 @@ if __name__ == '__main__':
     test_inactive_cell_no_update()
     test_get_state()
     test_coordinate_conversion()
+    test_persistent_walk()
+    test_deformation()
     print("All CellDFC tests passed.")

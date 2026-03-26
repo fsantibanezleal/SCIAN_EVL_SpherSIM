@@ -1,0 +1,197 @@
+/* ================================================================
+   SCIAN EVL SpherSIM - Dark theme with blue accent
+   ================================================================ */
+
+:root {
+    --bg-dark:       #0d1117;
+    --bg-panel:      #161b22;
+    --bg-input:      #0d1117;
+    --border:        #30363d;
+    --text-primary:  #e6edf3;
+    --text-secondary:#8b949e;
+    --accent:        #388bfd;
+    --accent-hover:  #58a6ff;
+    --accent-dim:    #1f3a5f;
+    --success:       #3fb950;
+    --warning:       #d29922;
+    --danger:        #f85149;
+    --cell-stroke:   #58a6ff;
+    --font-mono:     'Consolas', 'Courier New', monospace;
+}
+
+/* ---- Reset ---- */
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+                 Oxygen, Ubuntu, sans-serif;
+    background: var(--bg-dark);
+    color: var(--text-primary);
+    overflow: hidden;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* ---- Header ---- */
+#app-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 8px 20px;
+    background: var(--bg-panel);
+    border-bottom: 1px solid var(--border);
+    flex-shrink: 0;
+}
+
+#app-header h1 {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--accent);
+}
+
+#app-header .subtitle {
+    font-size: 12px;
+    color: var(--text-secondary);
+}
+
+/* ---- Main layout ---- */
+#app-container {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+}
+
+/* ---- Controls panel ---- */
+#controls-panel {
+    width: 280px;
+    min-width: 240px;
+    background: var(--bg-panel);
+    border-right: 1px solid var(--border);
+    overflow-y: auto;
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    flex-shrink: 0;
+}
+
+.panel-section {
+    background: var(--bg-dark);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 12px;
+}
+
+.panel-section h2 {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--text-secondary);
+    margin-bottom: 10px;
+}
+
+/* Buttons */
+.btn-row {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+
+button {
+    font-family: inherit;
+    font-size: 12px;
+    padding: 6px 14px;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    background: var(--accent-dim);
+    color: var(--text-primary);
+    cursor: pointer;
+    transition: background 0.15s, border-color 0.15s;
+}
+
+button:hover:not(:disabled) {
+    background: var(--accent);
+    border-color: var(--accent);
+}
+
+button:disabled {
+    opacity: 0.4;
+    cursor: default;
+}
+
+/* Labels and inputs */
+.panel-section label {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 12px;
+    color: var(--text-secondary);
+    margin-bottom: 6px;
+    gap: 8px;
+}
+
+.panel-section input[type="number"] {
+    width: 90px;
+    padding: 4px 6px;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    background: var(--bg-input);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    color: var(--text-primary);
+    text-align: right;
+}
+
+.panel-section input[type="number"]:focus {
+    outline: none;
+    border-color: var(--accent);
+}
+
+.panel-section input[type="checkbox"] {
+    accent-color: var(--accent);
+}
+
+/* Status */
+#status-info p {
+    font-size: 12px;
+    font-family: var(--font-mono);
+    color: var(--text-secondary);
+    margin-bottom: 4px;
+}
+
+#status-info span {
+    color: var(--text-primary);
+}
+
+/* ---- Viewport ---- */
+#viewport {
+    flex: 1;
+    position: relative;
+    overflow: hidden;
+}
+
+#three-canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+/* ---- Scrollbar ---- */
+::-webkit-scrollbar {
+    width: 6px;
+}
+::-webkit-scrollbar-track {
+    background: var(--bg-panel);
+}
+::-webkit-scrollbar-thumb {
+    background: var(--border);
+    border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: var(--text-secondary);
+}

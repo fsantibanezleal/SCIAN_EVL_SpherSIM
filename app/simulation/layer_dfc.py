@@ -2,16 +2,21 @@
 DFC Layer -- population of Deep Forming Cells on the embryo sphere.
 
 Manages a collection of DFC cells, handling initialization in a grid
-pattern, collective migration, and inter-cell collision detection and
-resolution.
+pattern, collective migration with persistent random walks, inter-cell
+collision detection and resolution, and differential adhesion.
 
 The DFC population migrates collectively during zebrafish epiboly,
 eventually converging to form Kupffer's vesicle (the left-right
-organizer).
+organizer).  The layer model captures three key biological behaviors:
+
+1. **Collective drift**: All cells are dragged by the EVL margin
+2. **Individual exploration**: Each cell performs a persistent random walk
+3. **Cohesion**: Adhesion forces keep the cluster from dispersing
 
 References:
     - Oteiza et al. (2015), Cell collectivity regulation
     - Keller et al. (bioRxiv 2025), Modeling epithelial morphogenesis
+    - Steinberg, M.S. (1963), Differential adhesion hypothesis
 """
 
 import numpy as np
@@ -24,24 +29,33 @@ class DFCLayer:
     """Manages the full population of DFC cells.
 
     Provides methods to initialize a grid arrangement, advance the
-    simulation by one time step (with noise and collisions), and
-    serialize the current state for the frontend.
+    simulation by one time step (with noise, collisions, and adhesion),
+    and serialize the current state for the frontend.
 
     Attributes:
         config: Dictionary of simulation parameters.
         cells: List of CellDFC instances.
         step_count: Number of simulation steps completed.
+        adhesion_enabled: Whether cell-cell adhesion forces are active.
+        adhesion_strength: Magnitude of adhesion force (radians/step).
     """
 
     def __init__(self, config: dict):
-        """Create a DFC layer.
+        """Create a DFC layer from a configuration dictionary.
 
         Args:
-            config: Dictionary with keys such as ``noise_std``.
+            config: Dictionary with recognized keys:
+                ``noise_std`` -- Noise amplitude for cell migration.
+                ``adhesion_enabled`` -- Enable/disable adhesion (default True).
+                ``adhesion_strength`` -- Adhesion force magnitude (default 0.001).
         """
         self.config = config
         self.cells: list[CellDFC] = []
         self.step_count = 0
+
+        # Adhesion parameters with sensible defaults
+        self.adhesion_enabled = config.get("adhesion_enabled", True)
+        self.adhesion_strength = config.get("adhesion_strength", 0.001)
 
     def initialize(
         self,
@@ -56,6 +70,8 @@ class DFCLayer:
 
         Cells are placed on a rectangular grid in (azimuth, elevation)
         space, packed as tightly as possible given their angular size.
+        The grid dimensions are computed to fill the placement region
+        as uniformly as possible.
 
         Args:
             embryo_radius: Radius of the embryo sphere (spatial units).
@@ -74,9 +90,9 @@ class DFCLayer:
             el_range = (0, np.pi / 4)
 
         self.cells = []
-        spacing = 2 * radial_size
+        spacing = 2 * radial_size  # minimum center-to-center distance
 
-        # Determine grid dimensions
+        # Determine grid dimensions to approximately fill the region
         az_span = az_range[1] - az_range[0]
         el_span = el_range[1] - el_range[0]
         cols = max(1, int(np.sqrt(num_cells * az_span / (el_span + 1e-10))))
@@ -88,9 +104,11 @@ class DFCLayer:
                 if count >= num_cells:
                     break
 
+                # Place cell at grid position with offset from boundary
                 az = az_range[0] + radial_size + col * spacing
                 el = el_range[1] - radial_size - row * spacing
 
+                # Only place if within bounds
                 if az_range[0] <= az <= az_range[1] and el_range[0] <= el <= el_range[1]:
                     cell = CellDFC(
                         azimuth=az,
@@ -105,8 +123,12 @@ class DFCLayer:
     def update(self, margin_velocity: np.ndarray):
         """Advance all cells by one time step.
 
-        Each active cell integrates the base margin velocity (with noise),
-        after which pairwise collisions are resolved.
+        The update sequence is:
+        1. Each active cell integrates the base margin velocity plus its
+           persistent random walk and noise components.
+        2. Pairwise collisions are resolved (cells pushed apart).
+        3. Differential adhesion is applied (cells pulled together if
+           within adhesion range but not overlapping).
 
         Args:
             margin_velocity: Base velocity [dAz, dEl, dR] from the EVL
@@ -114,15 +136,24 @@ class DFCLayer:
         """
         noise_std = self.config.get("noise_std", 0.5)
 
+        # Step 1: Individual cell updates (persistent random walk)
         for cell in self.cells:
             if cell.active:
                 cell.update(margin_velocity, noise_std=noise_std)
 
-        solve_collisions(self.cells)
+        # Step 2 & 3: Collision resolution and adhesion
+        solve_collisions(
+            self.cells,
+            adhesion_enabled=self.adhesion_enabled,
+            adhesion_strength=self.adhesion_strength,
+        )
         self.step_count += 1
 
     def get_state(self) -> dict:
         """Return a JSON-serializable snapshot of the layer.
+
+        Includes aggregate statistics and per-cell state dictionaries
+        for the frontend renderer.
 
         Returns:
             Dictionary with step count, number of active cells, and a

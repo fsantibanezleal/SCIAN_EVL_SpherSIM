@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600" width="600" height="600">
+  <defs>
+    <radialGradient id="sphereGrad" cx="40%" cy="35%" r="55%">
+      <stop offset="0%" stop-color="#4a6fa5" stop-opacity="0.3"/>
+      <stop offset="60%" stop-color="#2a4a7a" stop-opacity="0.5"/>
+      <stop offset="100%" stop-color="#1a2a4a" stop-opacity="0.7"/>
+    </radialGradient>
+    <radialGradient id="cellGrad" cx="40%" cy="35%" r="50%">
+      <stop offset="0%" stop-color="#ff8a65"/>
+      <stop offset="100%" stop-color="#d84315"/>
+    </radialGradient>
+    <marker id="arrowMigrate" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#66bb6a"/>
+    </marker>
+    <marker id="arrowCoord" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#bbb"/>
+    </marker>
+    <marker id="arrowEVL" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#42a5f5"/>
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect width="600" height="600" fill="#0f1923" rx="8"/>
+
+  <!-- Title -->
+  <text x="300" y="30" text-anchor="middle" font-family="Arial, sans-serif" font-size="18" font-weight="bold" fill="#e0e0e0">Spherical Embryo Model</text>
+
+  <!-- Main sphere -->
+  <circle cx="280" cy="300" r="210" fill="url(#sphereGrad)" stroke="#5a8abf" stroke-width="1.5"/>
+
+  <!-- Latitude lines (light grid) -->
+  <ellipse cx="280" cy="210" rx="195" ry="40" fill="none" stroke="#3a5a7a" stroke-width="0.5" stroke-dasharray="4,4"/>
+  <ellipse cx="280" cy="260" rx="205" ry="55" fill="none" stroke="#3a5a7a" stroke-width="0.5" stroke-dasharray="4,4"/>
+  <ellipse cx="280" cy="300" rx="210" ry="65" fill="none" stroke="#3a5a7a" stroke-width="0.7" stroke-dasharray="4,4"/>
+  <ellipse cx="280" cy="340" rx="205" ry="55" fill="none" stroke="#3a5a7a" stroke-width="0.5" stroke-dasharray="4,4"/>
+  <ellipse cx="280" cy="390" rx="195" ry="40" fill="none" stroke="#3a5a7a" stroke-width="0.5" stroke-dasharray="4,4"/>
+
+  <!-- Longitude lines (partial arcs) -->
+  <path d="M 280 90 Q 230 300, 280 510" fill="none" stroke="#3a5a7a" stroke-width="0.5" stroke-dasharray="4,4"/>
+  <path d="M 280 90 Q 330 300, 280 510" fill="none" stroke="#3a5a7a" stroke-width="0.5" stroke-dasharray="4,4"/>
+  <path d="M 280 90 Q 160 300, 280 510" fill="none" stroke="#3a5a7a" stroke-width="0.5" stroke-dasharray="4,4"/>
+  <path d="M 280 90 Q 400 300, 280 510" fill="none" stroke="#3a5a7a" stroke-width="0.5" stroke-dasharray="4,4"/>
+
+  <!-- EVL margin line (bold latitude) -->
+  <ellipse cx="280" cy="350" rx="200" ry="50" fill="none" stroke="#42a5f5" stroke-width="2.5" stroke-dasharray="8,4"/>
+  <text x="500" y="350" font-family="Arial, sans-serif" font-size="13" font-weight="bold" fill="#42a5f5">EVL Margin</text>
+
+  <!-- EVL migration arrows (downward) -->
+  <line x1="180" y1="335" x2="175" y2="365" stroke="#42a5f5" stroke-width="1.5" marker-end="url(#arrowEVL)"/>
+  <line x1="280" y1="348" x2="280" y2="380" stroke="#42a5f5" stroke-width="1.5" marker-end="url(#arrowEVL)"/>
+  <line x1="380" y1="335" x2="385" y2="365" stroke="#42a5f5" stroke-width="1.5" marker-end="url(#arrowEVL)"/>
+
+  <!-- DFC cells (circular patches on the sphere surface) -->
+  <!-- Cell 1 -->
+  <ellipse cx="235" cy="310" rx="22" ry="18" fill="url(#cellGrad)" fill-opacity="0.8" stroke="#ff6e40" stroke-width="1.5"/>
+  <!-- Cell 2 -->
+  <ellipse cx="275" cy="295" rx="20" ry="16" fill="url(#cellGrad)" fill-opacity="0.8" stroke="#ff6e40" stroke-width="1.5"/>
+  <!-- Cell 3 -->
+  <ellipse cx="310" cy="305" rx="21" ry="17" fill="url(#cellGrad)" fill-opacity="0.8" stroke="#ff6e40" stroke-width="1.5"/>
+  <!-- Cell 4 -->
+  <ellipse cx="255" cy="335" rx="19" ry="15" fill="url(#cellGrad)" fill-opacity="0.8" stroke="#ff6e40" stroke-width="1.5"/>
+  <!-- Cell 5 -->
+  <ellipse cx="295" cy="330" rx="20" ry="16" fill="url(#cellGrad)" fill-opacity="0.8" stroke="#ff6e40" stroke-width="1.5"/>
+  <!-- Cell 6 -->
+  <ellipse cx="340" cy="320" rx="18" ry="15" fill="url(#cellGrad)" fill-opacity="0.8" stroke="#ff6e40" stroke-width="1.5"/>
+  <!-- Cell 7 -->
+  <ellipse cx="215" cy="340" rx="17" ry="14" fill="url(#cellGrad)" fill-opacity="0.8" stroke="#ff6e40" stroke-width="1.5"/>
+
+  <!-- Cell label -->
+  <text x="355" y="290" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="#ff8a65">DFC cells</text>
+  <line x1="345" y1="294" x2="325" y2="308" stroke="#ff8a65" stroke-width="1"/>
+
+  <!-- Migration direction arrows (from cells downward) -->
+  <line x1="255" y1="350" x2="250" y2="380" stroke="#66bb6a" stroke-width="1.5" marker-end="url(#arrowMigrate)"/>
+  <line x1="290" y1="345" x2="288" y2="375" stroke="#66bb6a" stroke-width="1.5" marker-end="url(#arrowMigrate)"/>
+  <line x1="320" y1="338" x2="322" y2="368" stroke="#66bb6a" stroke-width="1.5" marker-end="url(#arrowMigrate)"/>
+
+  <!-- Migration label -->
+  <text x="340" y="395" font-family="Arial, sans-serif" font-size="11" fill="#66bb6a">Migration direction</text>
+  <text x="340" y="410" font-family="Arial, sans-serif" font-size="11" fill="#66bb6a">(toward vegetal pole)</text>
+
+  <!-- North pole label -->
+  <text x="280" y="78" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" fill="#ccc">Animal Pole (N)</text>
+
+  <!-- South pole label -->
+  <text x="280" y="530" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" fill="#ccc">Vegetal Pole (S)</text>
+
+  <!-- ===== Coordinate System Inset ===== -->
+  <rect x="20" y="460" width="220" height="120" rx="6" fill="#0a1420" fill-opacity="0.9" stroke="#3a5a7a" stroke-width="1"/>
+  <text x="130" y="480" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="#ccc">Coordinate System (AER)</text>
+
+  <!-- Mini coordinate diagram -->
+  <!-- Azimuth arc -->
+  <path d="M 80 540 A 30 30 0 0 1 110 520" fill="none" stroke="#ef5350" stroke-width="1.5"/>
+  <text x="120" y="535" font-family="Arial, sans-serif" font-size="10" fill="#ef5350">Azimuth</text>
+
+  <!-- Elevation arc -->
+  <path d="M 80 540 A 30 30 0 0 0 65 510" fill="none" stroke="#66bb6a" stroke-width="1.5"/>
+  <text x="30" y="505" font-family="Arial, sans-serif" font-size="10" fill="#66bb6a">Elevation</text>
+
+  <!-- Radius line -->
+  <line x1="80" y1="540" x2="80" y2="495" stroke="#42a5f5" stroke-width="1.5" marker-end="url(#arrowCoord)"/>
+  <text x="92" y="498" font-family="Arial, sans-serif" font-size="10" fill="#42a5f5">R</text>
+
+  <!-- Dot at origin -->
+  <circle cx="80" cy="540" r="3" fill="#fff"/>
+
+  <!-- Legend text -->
+  <text x="130" y="560" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#999">Azimuth: horizontal angle</text>
+  <text x="130" y="572" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#999">Elevation: vertical angle from equator</text>
+
+  <!-- ===== Legend ===== -->
+  <rect x="380" y="460" width="200" height="120" rx="6" fill="#0a1420" fill-opacity="0.9" stroke="#3a5a7a" stroke-width="1"/>
+  <text x="480" y="482" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="#ccc">Legend</text>
+
+  <ellipse cx="400" cy="502" rx="10" ry="8" fill="url(#cellGrad)" fill-opacity="0.8" stroke="#ff6e40" stroke-width="1"/>
+  <text x="420" y="506" font-family="Arial, sans-serif" font-size="10" fill="#ddd">DFC cell (circular contour)</text>
+
+  <line x1="390" y1="524" x2="410" y2="524" stroke="#42a5f5" stroke-width="2.5" stroke-dasharray="6,3"/>
+  <text x="420" y="528" font-family="Arial, sans-serif" font-size="10" fill="#ddd">EVL margin latitude</text>
+
+  <line x1="390" y1="546" x2="410" y2="546" stroke="#66bb6a" stroke-width="1.5" marker-end="url(#arrowMigrate)"/>
+  <text x="420" y="550" font-family="Arial, sans-serif" font-size="10" fill="#ddd">Migration direction</text>
+
+  <line x1="390" y1="568" x2="410" y2="568" stroke="#3a5a7a" stroke-width="0.5" stroke-dasharray="4,4"/>
+  <text x="420" y="572" font-family="Arial, sans-serif" font-size="10" fill="#ddd">Sphere lat/lon grid</text>
+</svg>

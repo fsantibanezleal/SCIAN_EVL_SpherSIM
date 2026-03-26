@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500" width="500" height="500">
+  <defs>
+    <radialGradient id="csphereGrad" cx="40%" cy="35%" r="55%">
+      <stop offset="0%" stop-color="#3a5a8a" stop-opacity="0.15"/>
+      <stop offset="100%" stop-color="#1a2a4a" stop-opacity="0.35"/>
+    </radialGradient>
+    <marker id="axisArrow" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#bbb"/>
+    </marker>
+    <marker id="xArrow" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#ef5350"/>
+    </marker>
+    <marker id="yArrow" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#66bb6a"/>
+    </marker>
+    <marker id="zArrow" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#42a5f5"/>
+    </marker>
+    <marker id="rArrow" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#ffab40"/>
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect width="500" height="500" fill="#0f1923" rx="8"/>
+
+  <!-- Title -->
+  <text x="250" y="30" text-anchor="middle" font-family="Arial, sans-serif" font-size="17" font-weight="bold" fill="#e0e0e0">AER Coordinate System</text>
+  <text x="250" y="48" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" fill="#999">Azimuth - Elevation - Radius</text>
+
+  <!-- Origin point -->
+  <circle cx="220" cy="260" r="4" fill="#fff"/>
+  <text x="210" y="278" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#ccc">O</text>
+
+  <!-- Semi-transparent sphere -->
+  <circle cx="220" cy="260" r="130" fill="url(#csphereGrad)" stroke="#5a8abf" stroke-width="1"/>
+
+  <!-- Equator ellipse -->
+  <ellipse cx="220" cy="260" rx="130" ry="40" fill="none" stroke="#5a8abf" stroke-width="0.8" stroke-dasharray="4,3"/>
+
+  <!-- X axis (right, red) -->
+  <line x1="220" y1="260" x2="380" y2="260" stroke="#ef5350" stroke-width="2" marker-end="url(#xArrow)"/>
+  <text x="390" y="264" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#ef5350">X</text>
+
+  <!-- Y axis (forward-right perspective, green) -->
+  <line x1="220" y1="260" x2="135" y2="320" stroke="#66bb6a" stroke-width="2" marker-end="url(#yArrow)"/>
+  <text x="118" y="335" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#66bb6a">Y</text>
+
+  <!-- Z axis (up, blue) -->
+  <line x1="220" y1="260" x2="220" y2="110" stroke="#42a5f5" stroke-width="2" marker-end="url(#zArrow)"/>
+  <text x="228" y="105" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#42a5f5">Z</text>
+
+  <!-- Radius line to point P on sphere -->
+  <line x1="220" y1="260" x2="310" y2="180" stroke="#ffab40" stroke-width="2" stroke-dasharray="5,3" marker-end="url(#rArrow)"/>
+  <circle cx="310" cy="180" r="5" fill="#ffab40"/>
+  <text x="322" y="175" font-family="Arial, sans-serif" font-size="13" font-weight="bold" fill="#ffab40">P</text>
+
+  <!-- Radius label -->
+  <text x="276" y="210" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="#ffab40" transform="rotate(-40,276,210)">R (radius)</text>
+
+  <!-- Projection onto equatorial plane -->
+  <line x1="310" y1="180" x2="310" y2="248" stroke="#888" stroke-width="1" stroke-dasharray="3,3"/>
+  <circle cx="310" cy="248" r="3" fill="#888"/>
+  <text x="322" y="252" font-family="Arial, sans-serif" font-size="9" fill="#888">P'</text>
+
+  <!-- Azimuth arc (horizontal angle from X axis to projection) -->
+  <path d="M 250 260 A 30 10 0 0 0 270 253" fill="none" stroke="#e040fb" stroke-width="2"/>
+  <text x="260" y="245" font-family="Arial, sans-serif" font-size="10" font-weight="bold" fill="#e040fb">az</text>
+
+  <!-- Azimuth label with arrow -->
+  <text x="305" y="290" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="#e040fb">Azimuth</text>
+  <text x="305" y="305" font-family="Arial, sans-serif" font-size="10" fill="#999">Horizontal angle</text>
+  <text x="305" y="318" font-family="Arial, sans-serif" font-size="10" fill="#999">around Z axis</text>
+
+  <!-- Elevation arc (vertical angle from equator to P) -->
+  <path d="M 300 252 A 35 35 0 0 0 310 225" fill="none" stroke="#26c6da" stroke-width="2"/>
+  <text x="315" y="240" font-family="Arial, sans-serif" font-size="10" font-weight="bold" fill="#26c6da">el</text>
+
+  <!-- Elevation label -->
+  <text x="370" y="210" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="#26c6da">Elevation</text>
+  <text x="370" y="225" font-family="Arial, sans-serif" font-size="10" fill="#999">Angle from</text>
+  <text x="370" y="238" font-family="Arial, sans-serif" font-size="10" fill="#999">equatorial plane</text>
+
+  <!-- ===== Conversion Formulas Box ===== -->
+  <rect x="25" y="355" width="450" height="125" rx="8" fill="#0a1420" fill-opacity="0.9" stroke="#3a5a7a" stroke-width="1"/>
+  <text x="250" y="378" text-anchor="middle" font-family="Arial, sans-serif" font-size="13" font-weight="bold" fill="#ccc">Conversion Formulas</text>
+
+  <!-- AER -> XYZ -->
+  <text x="45" y="400" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="#90caf9">AER to XYZ:</text>
+  <text x="55" y="418" font-family="monospace" font-size="11" fill="#ddd">x = R * cos(el) * cos(az)</text>
+  <text x="55" y="434" font-family="monospace" font-size="11" fill="#ddd">y = R * cos(el) * sin(az)</text>
+  <text x="55" y="450" font-family="monospace" font-size="11" fill="#ddd">z = R * sin(el)</text>
+
+  <!-- XYZ -> AER -->
+  <text x="280" y="400" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="#ffab40">XYZ to AER:</text>
+  <text x="290" y="418" font-family="monospace" font-size="11" fill="#ddd">R  = sqrt(x^2+y^2+z^2)</text>
+  <text x="290" y="434" font-family="monospace" font-size="11" fill="#ddd">el = arcsin(z / R)</text>
+  <text x="290" y="450" font-family="monospace" font-size="11" fill="#ddd">az = arctan2(y, x)</text>
+
+  <!-- Bidirectional arrow between formulas -->
+  <line x1="240" y1="425" x2="275" y2="425" stroke="#64b5f6" stroke-width="1.5"/>
+  <polygon points="275,422 280,425 275,428" fill="#64b5f6"/>
+  <polygon points="240,422 235,425 240,428" fill="#64b5f6"/>
+
+  <!-- North/South labels on sphere -->
+  <text x="220" y="125" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#888">+Z (North)</text>
+  <text x="220" y="400" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#888" visibility="hidden">-Z (South)</text>
+</svg>

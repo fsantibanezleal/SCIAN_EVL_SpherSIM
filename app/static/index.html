@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SCIAN EVL SpherSIM</title>
+    <link rel="stylesheet" href="/static/css/style.css" />
+</head>
+<body>
+    <!-- Header -->
+    <header id="app-header">
+        <h1>SCIAN EVL SpherSIM</h1>
+        <span class="subtitle">Spherical Embryo DFC Migration Simulator</span>
+    </header>
+
+    <!-- Main layout -->
+    <div id="app-container">
+        <!-- Left panel: controls -->
+        <aside id="controls-panel">
+            <section class="panel-section">
+                <h2>Simulation</h2>
+                <div class="btn-row">
+                    <button id="btn-init" title="Initialize simulation">Init</button>
+                    <button id="btn-play" title="Start / Resume">Play</button>
+                    <button id="btn-pause" title="Pause" disabled>Pause</button>
+                    <button id="btn-step" title="Single step">Step</button>
+                </div>
+            </section>
+
+            <section class="panel-section">
+                <h2>Parameters</h2>
+
+                <label>Embryo Radius
+                    <input id="param-radius" type="number" value="1000" min="100" max="5000" step="100" />
+                </label>
+
+                <label>Number of DFCs
+                    <input id="param-num-dfcs" type="number" value="24" min="1" max="100" step="1" />
+                </label>
+
+                <label>Cell Radial Size (rad)
+                    <input id="param-radial-size" type="number" value="0.049" min="0.01" max="0.5" step="0.005" />
+                </label>
+
+                <label>Contour Vertices
+                    <input id="param-vertices" type="number" value="100" min="10" max="500" step="10" />
+                </label>
+
+                <label>EVL Speed
+                    <input id="param-evl-speed" type="number" value="0.005" min="0.0001" max="0.05" step="0.001" />
+                </label>
+
+                <label>Noise Std
+                    <input id="param-noise" type="number" value="0.5" min="0" max="2" step="0.1" />
+                </label>
+
+                <label>Step Interval (ms)
+                    <input id="param-speed" type="number" value="50" min="10" max="1000" step="10" />
+                </label>
+            </section>
+
+            <section class="panel-section">
+                <h2>Status</h2>
+                <div id="status-info">
+                    <p>Step: <span id="stat-step">0</span></p>
+                    <p>Cells: <span id="stat-cells">0</span></p>
+                    <p>WS: <span id="stat-ws">disconnected</span></p>
+                </div>
+            </section>
+
+            <section class="panel-section">
+                <h2>View</h2>
+                <label>
+                    <input id="chk-wireframe" type="checkbox" /> Wireframe sphere
+                </label>
+                <label>
+                    <input id="chk-axes" type="checkbox" checked /> Show axes
+                </label>
+                <label>
+                    <input id="chk-centers" type="checkbox" checked /> Show cell centers
+                </label>
+            </section>
+        </aside>
+
+        <!-- Right: 3D viewport -->
+        <main id="viewport">
+            <canvas id="three-canvas"></canvas>
+        </main>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+    <script src="/static/js/websocket.js"></script>
+    <script src="/static/js/renderer3d.js"></script>
+    <script src="/static/js/controls.js"></script>
+    <script src="/static/js/app.js"></script>
+</body>
+</html>

@@ -90,15 +90,20 @@ class SphericalEnvironment:
         # Noise amplitude for stochastic cell migration
         self.noise_std: float = config.get("noise_std", 0.5)
 
+        # EVL margin elevation: starts at the initial placement region upper bound
+        # and moves vegetalward (decreasing elevation) each step
+        self.margin_elevation: float = self.el_range[1]
+
         # Simulation clock
         self.step_count: int = 0
 
     def update(self):
         """Advance the environment by one time step.
 
-        Currently only increments the step counter.  Future extensions
-        could model time-varying EVL speed or environmental gradients.
+        Updates the EVL margin elevation based on the margin velocity.
+        The margin moves vegetalward (decreasing elevation) each step.
         """
+        self.margin_elevation += self.margin_velocity[1]  # dEl component (negative)
         self.step_count += 1
 
     def get_state(self) -> dict:
@@ -113,6 +118,7 @@ class SphericalEnvironment:
         return {
             "embryo_radius": self.embryo_radius,
             "margin_velocity": self.margin_velocity.tolist(),
+            "margin_elevation": self.margin_elevation,
             "step": self.step_count,
             "az_range": list(self.az_range),
             "el_range": list(self.el_range),

@@ -129,7 +129,7 @@ async def step():
 
     env = sim_state["env"]
     env.update()
-    sim_state["dfc_layer"].update(env.margin_velocity)
+    sim_state["dfc_layer"].update(env.margin_velocity, evl_elevation=env.margin_elevation)
 
     return {
         "dfc_layer": sim_state["dfc_layer"].get_state(),

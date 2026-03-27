@@ -1,5 +1,160 @@
 # Development History
 
+## v2.2.0 (2026-03-26) -- Spherical Mechanics Rewrite
+
+### Critical Fix: Cartesian Collision Resolution
+
+**Problem**: v2.1 resolved collisions in AER (azimuth, elevation) space by pushing cells with equal angular increments. The AER metric is non-uniform:
+
+```
+ds² = R²(dθ² + cos²(θ)·dφ²)
+```
+
+An azimuth increment Δφ produces physical arc length R·cos(θ)·Δφ, which varies with latitude:
+- Equator (θ=0): full arc length
+- 60 latitude: half arc length
+- Pole (θ=90): zero arc length (singularity)
+
+This caused cells near the poles to barely separate during collision resolution.
+
+**Solution**: Collisions are now resolved in Cartesian 3D space:
+
+```
+1. direction = normalize(xyz_i - xyz_j)     [3D push direction]
+2. tangent = direction - (direction·n_hat)·n_hat    [project to tangent plane]
+3. xyz_new = xyz + push · tangent/|tangent|  [move in tangent plane]
+4. xyz_new = R · normalize(xyz_new)          [project back to sphere]
+5. (phi,theta,R) = cart2sph(xyz_new)         [convert to AER]
+```
+
+Compact form:
+```
+xyz_new = R · normalize(xyz + push · tangent)
+```
+
+This gives physically correct, latitude-independent separation distances.
+
+**Also applied to**: Differential adhesion forces, which suffered from the same metric distortion.
+
+> See `docs/diagrams/architecture.svg` for visual reference.
+
+### New: EVL-DFC Elastic Spring Coupling
+
+**Problem**: v2.1 gave all DFC cells the same constant EVL velocity, regardless of their distance from the EVL margin. This doesn't match the biological mechanism where DFCs maintain elastic apical attachments to the EVL.
+
+**Solution**: Per-cell elastic coupling with exponential distance decay:
+
+```
+F = k · d · exp(-d/λ)
+```
+
+where:
+- k = spring constant (stiffness of the attachment)
+- d = el_cell - el_EVL (elevation difference)
+- λ = 0.3 rad (attachment decay length)
+
+This creates a biologically realistic gradient where:
+- **Leader cells** (closest to EVL margin): strong pull, fast migration
+- **Follower cells** (further from EVL): weak pull, lag behind
+- **Detached cells** (below EVL margin): no pull
+
+**Physical basis**: DFCs maintain TJ-enriched apical attachments to the EVL (Ablooglu et al., eLife 2021). The elastic tether transmits epiboly forces, with attachment probability decreasing with distance.
+
+### New: Cluster Cohesion Metrics
+
+Added real-time quantification of DFC cluster state:
+
+**Centroid**: Mean position of all active cells
+```
+C = (1/N) Σᵢ (φᵢ, θᵢ)
+```
+
+**Spread**: RMS angular distance from centroid (compactness)
+```
+σ = √(mean(d²)) = √[(1/N) Σᵢ ((φᵢ-C_φ)² + (θᵢ-C_θ)²)]
+```
+
+**Elongation**: Ratio of principal axes from covariance eigenvalues
+```
+e = √(λ_max / λ_min)    where λ = eigenvalues of Cov(φ,θ)
+```
+
+- Isotropic cluster: e ~ 1
+- Elongated cluster: e >> 1 (indicates streaming migration)
+- Increasing spread: cluster fragmenting
+- Decreasing spread: cluster converging
+
+### Architecture (v2.2)
+
+```
+Per-cell update:
+  1. Compute EVL coupling force F = k·d·exp(-d/λ)
+  2. Combine: v_eff = v_EVL + F_coupling
+  3. Persistent random walk: v += bias + noise
+  4. Advance deformation phases
+
+Collective interactions:
+  5. Collision resolution (Cartesian tangent push)
+  6. Differential adhesion (Cartesian tangent pull)
+  7. Compute cluster metrics (centroid, spread, elongation)
+```
+
+---
+
+## v2.1.0 (2026-03-26)
+
+### Algorithmic Improvements
+
+#### Great-Circle Collision Detection (Bug Fix)
+Replaced flat angular distance approximation with the Haversine formula:
+
+```
+d = 2·arcsin(√(sin²(Δφ/2) + cos(φ₁)·cos(φ₂)·sin²(Δλ/2)))
+```
+
+This provides exact geodesic distance on the sphere, correcting errors
+near poles and at large angular separations.
+
+#### Persistent Random Walk Migration
+Cells maintain directional bias for τ ∈ [8, 25] steps before stochastic
+reorientation, modeling filopodial persistence:
+
+```
+v = v_EVL + α · (cos(θ_bias), sin(θ_bias)) + σ · ξ
+```
+
+Compact form:
+```
+v = v_EVL + α · bias + σ · ξ
+```
+
+where α = 0.3 * |v_EVL| and ξ ~ N(0, 1).
+
+#### Differential Adhesion (Steinberg, 1963)
+Cell-cell adhesion follows:
+
+```
+F_adh = s · (d - d_contact) / (d_max - d_contact) · d_hat
+```
+
+for d_contact < d < d_max, creating cohesive cell clusters.
+
+#### Dynamic Cell Deformation (Fourier Modes)
+Cell contours are perturbed by low-frequency Fourier modes k = 2,3,4,5:
+
+```
+R(θ) = R_base · (1 + ε · Σ_k cos(k·θ + φ_k(t)))
+```
+
+with time-varying phases φ_k(t) creating membrane fluctuations.
+
+### Frontend Improvements
+- Help modal with interactive usage guide
+- Tooltips on all parameter controls
+- Section-level expandable help text
+
+---
+
 ## v2.0.0 (2026-03-26) -- Python/Web Rewrite
 
 Complete rewrite of the simulation platform from MATLAB to a modern Python web stack.
@@ -20,6 +175,8 @@ Complete rewrite of the simulation platform from MATLAB to a modern Python web s
 - Python 3.11+, FastAPI, Uvicorn, NumPy, SciPy, Pydantic
 - Three.js r128 (loaded from CDN), vanilla JavaScript, HTML5, CSS3
 - Communication via REST (JSON) and WebSocket (JSON streaming)
+
+> See `docs/diagrams/architecture.svg` and `docs/diagrams/cell_model.svg` for visual reference.
 
 ---
 

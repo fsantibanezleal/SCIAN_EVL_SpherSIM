@@ -11,56 +11,121 @@
     <header id="app-header">
         <h1>SCIAN EVL SpherSIM</h1>
         <span class="subtitle">Spherical Embryo DFC Migration Simulator</span>
+        <button id="btn-help" class="help-btn" title="Open help guide">?</button>
     </header>
+
+    <!-- Help Modal -->
+    <div id="help-modal" class="modal">
+        <div class="modal-content">
+            <span id="modal-close" class="modal-close">&times;</span>
+            <h2>SCIAN EVL SpherSIM &mdash; Help</h2>
+
+            <h3>Getting Started</h3>
+            <ol>
+                <li>Click <strong>Init</strong> to create the embryo sphere and place DFC cells.</li>
+                <li>Click <strong>Play</strong> to start the simulation. Cells will migrate driven by the EVL margin.</li>
+                <li>Use <strong>Pause</strong> to stop and <strong>Step</strong> to advance one frame at a time.</li>
+                <li>Rotate the 3D view by clicking and dragging in the viewport.</li>
+            </ol>
+
+            <h3>What Are DFC Cells?</h3>
+            <p>
+                Dorsal Forerunner Cells (DFCs) are a group of non-involuting cells in the zebrafish
+                embryo that migrate collectively toward the vegetal pole, driven by the advancing
+                Enveloping Layer (EVL) margin. They eventually coalesce to form Kupffer's vesicle,
+                the organ of left-right asymmetry.
+            </p>
+
+            <h3>Simulation Parameters</h3>
+            <ul>
+                <li><strong>Embryo Radius:</strong> Size of the spherical embryo in spatial units.</li>
+                <li><strong>Number of DFCs:</strong> How many cells to place on the sphere.</li>
+                <li><strong>Cell Radial Size:</strong> Angular half-width of each cell (radians).</li>
+                <li><strong>Contour Vertices:</strong> Resolution of the cell boundary polygon.</li>
+                <li><strong>EVL Speed:</strong> Velocity of the EVL epiboly margin (radians/step).</li>
+                <li><strong>Noise Std:</strong> Amplitude of stochastic migration noise.</li>
+                <li><strong>Step Interval:</strong> Milliseconds between simulation frames.</li>
+            </ul>
+
+            <h3>3D View Controls</h3>
+            <ul>
+                <li><strong>Left-click + drag:</strong> Orbit (rotate) the view around the embryo.</li>
+                <li><strong>Scroll wheel:</strong> Zoom in and out.</li>
+                <li><strong>Right-click + drag:</strong> Pan the camera.</li>
+            </ul>
+        </div>
+    </div>
 
     <!-- Main layout -->
     <div id="app-container">
         <!-- Left panel: controls -->
         <aside id="controls-panel">
             <section class="panel-section">
-                <h2>Simulation</h2>
+                <div class="section-header">
+                    <h2>Simulation</h2>
+                    <span class="help-icon" data-help="sim-help" title="Toggle help for this section">?</span>
+                </div>
+                <div id="sim-help" class="help-text" hidden>
+                    Use <strong>Init</strong> to set up the embryo and cells, then <strong>Play</strong>
+                    to run. <strong>Step</strong> advances one frame at a time for detailed inspection.
+                </div>
                 <div class="btn-row">
-                    <button id="btn-init" title="Initialize simulation">Init</button>
-                    <button id="btn-play" title="Start / Resume">Play</button>
-                    <button id="btn-pause" title="Pause" disabled>Pause</button>
-                    <button id="btn-step" title="Single step">Step</button>
+                    <button id="btn-init" title="Initialize simulation with current parameters">Init</button>
+                    <button id="btn-play" title="Start or resume the simulation">Play</button>
+                    <button id="btn-pause" title="Pause the running simulation" disabled>Pause</button>
+                    <button id="btn-step" title="Advance the simulation by a single time step">Step</button>
                 </div>
             </section>
 
             <section class="panel-section">
-                <h2>Parameters</h2>
+                <div class="section-header">
+                    <h2>Parameters</h2>
+                    <span class="help-icon" data-help="params-help" title="Toggle help for this section">?</span>
+                </div>
+                <div id="params-help" class="help-text" hidden>
+                    Adjust these values before clicking <strong>Init</strong>.
+                    Parameters control the embryo geometry, cell population, migration dynamics,
+                    and animation speed.
+                </div>
 
-                <label>Embryo Radius
+                <label title="Radius of the spherical embryo in spatial units (default 1000)">Embryo Radius
                     <input id="param-radius" type="number" value="1000" min="100" max="5000" step="100" />
                 </label>
 
-                <label>Number of DFCs
+                <label title="Number of DFC cells placed on the sphere at initialization">Number of DFCs
                     <input id="param-num-dfcs" type="number" value="24" min="1" max="100" step="1" />
                 </label>
 
-                <label>Cell Radial Size (rad)
+                <label title="Angular half-width of each cell contour in radians">Cell Radial Size (rad)
                     <input id="param-radial-size" type="number" value="0.049" min="0.01" max="0.5" step="0.005" />
                 </label>
 
-                <label>Contour Vertices
+                <label title="Number of vertices used to discretize each cell boundary polygon">Contour Vertices
                     <input id="param-vertices" type="number" value="100" min="10" max="500" step="10" />
                 </label>
 
-                <label>EVL Speed
+                <label title="Speed of the EVL epiboly margin in radians per step (drives cell migration)">EVL Speed
                     <input id="param-evl-speed" type="number" value="0.005" min="0.0001" max="0.05" step="0.001" />
                 </label>
 
-                <label>Noise Std
+                <label title="Standard deviation of stochastic migration noise (higher = more random movement)">Noise Std
                     <input id="param-noise" type="number" value="0.5" min="0" max="2" step="0.1" />
                 </label>
 
-                <label>Step Interval (ms)
+                <label title="Delay between simulation frames in milliseconds (lower = faster animation)">Step Interval (ms)
                     <input id="param-speed" type="number" value="50" min="10" max="1000" step="10" />
                 </label>
             </section>
 
             <section class="panel-section">
-                <h2>Status</h2>
+                <div class="section-header">
+                    <h2>Status</h2>
+                    <span class="help-icon" data-help="status-help" title="Toggle help for this section">?</span>
+                </div>
+                <div id="status-help" class="help-text" hidden>
+                    Displays the current simulation step, active cell count, and WebSocket
+                    connection state.
+                </div>
                 <div id="status-info">
                     <p>Step: <span id="stat-step">0</span></p>
                     <p>Cells: <span id="stat-cells">0</span></p>
@@ -69,14 +134,21 @@
             </section>
 
             <section class="panel-section">
-                <h2>View</h2>
-                <label>
+                <div class="section-header">
+                    <h2>View</h2>
+                    <span class="help-icon" data-help="view-help" title="Toggle help for this section">?</span>
+                </div>
+                <div id="view-help" class="help-text" hidden>
+                    Toggle rendering options for the 3D viewport. The wireframe shows the
+                    sphere geometry; axes help orient the view; cell centers mark each DFC position.
+                </div>
+                <label title="Render the embryo sphere as a wireframe mesh">
                     <input id="chk-wireframe" type="checkbox" /> Wireframe sphere
                 </label>
-                <label>
+                <label title="Show the XYZ coordinate axes in the 3D viewport">
                     <input id="chk-axes" type="checkbox" checked /> Show axes
                 </label>
-                <label>
+                <label title="Show a marker dot at each cell center position">
                     <input id="chk-centers" type="checkbox" checked /> Show cell centers
                 </label>
             </section>
@@ -95,5 +167,52 @@
     <script src="/static/js/renderer3d.js"></script>
     <script src="/static/js/controls.js"></script>
     <script src="/static/js/app.js"></script>
+
+    <!-- Help modal and section help toggle logic -->
+    <script>
+    (function () {
+        var modal = document.getElementById('help-modal');
+        var btnOpen = document.getElementById('btn-help');
+        var btnClose = document.getElementById('modal-close');
+
+        btnOpen.addEventListener('click', function () {
+            modal.classList.add('modal-visible');
+        });
+
+        btnClose.addEventListener('click', function () {
+            modal.classList.remove('modal-visible');
+        });
+
+        modal.addEventListener('click', function (e) {
+            if (e.target === modal) {
+                modal.classList.remove('modal-visible');
+            }
+        });
+
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape') {
+                modal.classList.remove('modal-visible');
+            }
+        });
+
+        // Section-level help icon toggles
+        document.querySelectorAll('.help-icon').forEach(function (icon) {
+            icon.addEventListener('click', function () {
+                var targetId = this.getAttribute('data-help');
+                var target = document.getElementById(targetId);
+                if (target) {
+                    var isHidden = target.hasAttribute('hidden');
+                    if (isHidden) {
+                        target.removeAttribute('hidden');
+                        this.classList.add('help-icon-active');
+                    } else {
+                        target.setAttribute('hidden', '');
+                        this.classList.remove('help-icon-active');
+                    }
+                }
+            });
+        });
+    })();
+    </script>
 </body>
 </html>

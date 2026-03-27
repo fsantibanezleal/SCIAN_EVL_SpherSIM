@@ -1,0 +1,149 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 500" width="700" height="500">
+  <defs>
+    <marker id="arrowCyan" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#44ddff"/>
+    </marker>
+    <marker id="arrowCyanSm" markerWidth="8" markerHeight="5" refX="8" refY="2.5" orient="auto">
+      <polygon points="0 0, 8 2.5, 0 5" fill="#44ddff"/>
+    </marker>
+    <marker id="arrowCyanXs" markerWidth="6" markerHeight="4" refX="6" refY="2" orient="auto">
+      <polygon points="0 0, 6 2, 0 4" fill="#44ddff66"/>
+    </marker>
+    <linearGradient id="evlGrad" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#ff884400"/>
+      <stop offset="20%" stop-color="#ff8844"/>
+      <stop offset="80%" stop-color="#ff8844"/>
+      <stop offset="100%" stop-color="#ff884400"/>
+    </linearGradient>
+    <linearGradient id="bgGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#0d1117"/>
+      <stop offset="100%" stop-color="#161b22"/>
+    </linearGradient>
+    <filter id="glowBlue">
+      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="softGlow">
+      <feGaussianBlur stdDeviation="2" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <!-- Spring pattern -->
+    <pattern id="springPat" width="8" height="4" patternUnits="userSpaceOnUse">
+      <path d="M0,2 Q2,0 4,2 Q6,4 8,2" fill="none" stroke="#ffdd44" stroke-width="1"/>
+    </pattern>
+  </defs>
+
+  <!-- Background -->
+  <rect width="700" height="500" fill="url(#bgGrad)" rx="8"/>
+
+  <!-- Title -->
+  <text x="350" y="32" text-anchor="middle" fill="#e6edf3" font-family="Consolas, monospace" font-size="16" font-weight="bold">EVL-DFC Elastic Spring Coupling</text>
+  <text x="350" y="50" text-anchor="middle" fill="#888" font-family="Consolas, monospace" font-size="10">F = k * d * exp(-d / lambda)  |  lambda = 0.3 rad</text>
+
+  <!-- Half-sphere cross-section (arc) -->
+  <path d="M 80,400 Q 80,100 350,80 Q 620,100 620,400" fill="none" stroke="#3388aa55" stroke-width="2"/>
+  <!-- Sphere interior shading -->
+  <path d="M 80,400 Q 80,100 350,80 Q 620,100 620,400 Z" fill="#11223344"/>
+
+  <!-- Sphere surface label -->
+  <text x="640" y="250" fill="#3388aa88" font-family="Consolas, monospace" font-size="9" transform="rotate(75,640,250)">Sphere surface</text>
+
+  <!-- Animal pole -->
+  <circle cx="350" cy="80" r="4" fill="#3388aa"/>
+  <text x="350" y="72" text-anchor="middle" fill="#3388aa" font-family="Consolas, monospace" font-size="9">Animal Pole</text>
+
+  <!-- EVL margin - curved line across the sphere at ~30% from top -->
+  <path d="M 115,210 Q 200,195 350,188 Q 500,195 585,210" fill="none" stroke="url(#evlGrad)" stroke-width="4" filter="url(#softGlow)"/>
+  <text x="600" y="205" fill="#ff8844" font-family="Consolas, monospace" font-size="11" font-weight="bold">EVL margin</text>
+  <text x="600" y="218" fill="#ff884488" font-family="Consolas, monospace" font-size="9">epiboly front</text>
+
+  <!-- Direction arrow showing EVL movement -->
+  <path d="M 350,188 L 350,172" fill="none" stroke="#ff8844" stroke-width="1.5" marker-end="url(#arrowCyan)" style="marker-end: none"/>
+  <polygon points="345,175 350,165 355,175" fill="#ff884488"/>
+  <text x="370" y="170" fill="#ff884488" font-family="Consolas, monospace" font-size="8">vegetal-ward</text>
+
+  <!-- ====== DFC CELLS ====== -->
+
+  <!-- Cell 1: Leader - very close to EVL, strong coupling -->
+  <circle cx="180" cy="225" r="18" fill="#44ddff22" stroke="#44ddff" stroke-width="2.5" filter="url(#glowBlue)"/>
+  <text x="180" y="229" text-anchor="middle" fill="#44ddff" font-family="Consolas, monospace" font-size="9" font-weight="bold">DFC1</text>
+  <!-- Spring 1: thick, short -->
+  <path d="M 180,207 Q 173,204 180,201 Q 187,198 180,195" fill="none" stroke="#ffdd44" stroke-width="2.5"/>
+  <!-- Force arrow 1: BIG -->
+  <line x1="155" y1="225" x2="155" y2="185" stroke="#44ddff" stroke-width="3" marker-end="url(#arrowCyan)" filter="url(#glowBlue)"/>
+  <text x="135" y="205" text-anchor="middle" fill="#44ddff" font-family="Consolas, monospace" font-size="9" font-weight="bold">F=0.95</text>
+
+  <!-- Cell 2: Close follower -->
+  <circle cx="280" cy="255" r="18" fill="#44ddff22" stroke="#44ddff" stroke-width="2" filter="url(#glowBlue)"/>
+  <text x="280" y="259" text-anchor="middle" fill="#44ddff" font-family="Consolas, monospace" font-size="9" font-weight="bold">DFC2</text>
+  <!-- Spring 2 -->
+  <path d="M 280,237 Q 273,231 280,225 Q 287,219 280,213 Q 273,207 280,201 Q 287,197 280,192" fill="none" stroke="#ffdd44" stroke-width="2"/>
+  <!-- Force arrow 2: large -->
+  <line x1="258" y1="255" x2="258" y2="205" stroke="#44ddff" stroke-width="2.5" marker-end="url(#arrowCyan)" filter="url(#glowBlue)"/>
+  <text x="240" y="230" text-anchor="middle" fill="#44ddffcc" font-family="Consolas, monospace" font-size="9">F=0.72</text>
+
+  <!-- Cell 3: Mid-distance -->
+  <circle cx="370" cy="300" r="18" fill="#44ddff22" stroke="#44ddff" stroke-width="1.8"/>
+  <text x="370" y="304" text-anchor="middle" fill="#44ddff" font-family="Consolas, monospace" font-size="9" font-weight="bold">DFC3</text>
+  <!-- Spring 3: medium -->
+  <path d="M 370,282 Q 363,274 370,266 Q 377,258 370,250 Q 363,242 370,234 Q 377,226 370,218 Q 363,210 370,202 Q 377,196 370,190" fill="none" stroke="#ffdd4499" stroke-width="1.5"/>
+  <!-- Force arrow 3: medium -->
+  <line x1="348" y1="300" x2="348" y2="260" stroke="#44ddffaa" stroke-width="2" marker-end="url(#arrowCyanSm)"/>
+  <text x="330" y="280" text-anchor="middle" fill="#44ddff99" font-family="Consolas, monospace" font-size="9">F=0.38</text>
+
+  <!-- Cell 4: Far follower -->
+  <circle cx="460" cy="350" r="18" fill="#44ddff11" stroke="#44ddff88" stroke-width="1.5"/>
+  <text x="460" y="354" text-anchor="middle" fill="#44ddff88" font-family="Consolas, monospace" font-size="9" font-weight="bold">DFC4</text>
+  <!-- Spring 4: thin, long, faded -->
+  <path d="M 460,332 Q 453,322 460,312 Q 467,302 460,292 Q 453,282 460,272 Q 467,262 460,252 Q 453,242 460,232 Q 467,222 460,212 Q 453,204 460,196" fill="none" stroke="#ffdd4455" stroke-width="1"/>
+  <!-- Force arrow 4: small -->
+  <line x1="440" y1="350" x2="440" y2="325" stroke="#44ddff66" stroke-width="1.5" marker-end="url(#arrowCyanXs)"/>
+  <text x="422" y="340" text-anchor="middle" fill="#44ddff66" font-family="Consolas, monospace" font-size="9">F=0.11</text>
+
+  <!-- Cell 5: Detached - below EVL, no coupling -->
+  <circle cx="540" cy="390" r="18" fill="#44ddff08" stroke="#44ddff44" stroke-width="1" stroke-dasharray="4,3"/>
+  <text x="540" y="394" text-anchor="middle" fill="#44ddff44" font-family="Consolas, monospace" font-size="9">DFC5</text>
+  <!-- No spring, just X -->
+  <text x="540" y="370" text-anchor="middle" fill="#ff444488" font-family="Consolas, monospace" font-size="14">x</text>
+  <text x="560" y="420" text-anchor="start" fill="#ff444488" font-family="Consolas, monospace" font-size="9">F=0</text>
+  <text x="560" y="432" text-anchor="start" fill="#ff444466" font-family="Consolas, monospace" font-size="8">(detached)</text>
+
+  <!-- Distance axis annotation -->
+  <line x1="100" y1="440" x2="620" y2="440" stroke="#33445588" stroke-width="1"/>
+  <text x="100" y="460" fill="#44ddff" font-family="Consolas, monospace" font-size="10">Close to EVL</text>
+  <text x="530" y="460" fill="#44ddff44" font-family="Consolas, monospace" font-size="10">Far from EVL</text>
+  <polygon points="100,440 110,437 110,443" fill="#44ddff88"/>
+  <polygon points="620,440 610,437 610,443" fill="#44ddff44"/>
+
+  <!-- Legend box -->
+  <rect x="30" y="60" width="180" height="100" rx="6" fill="#161b22" stroke="#334455" stroke-width="1"/>
+  <text x="120" y="78" text-anchor="middle" fill="#e6edf3" font-family="Consolas, monospace" font-size="10" font-weight="bold">Legend</text>
+  <!-- Spring symbol -->
+  <path d="M 45,92 Q 52,88 59,92 Q 66,96 73,92" fill="none" stroke="#ffdd44" stroke-width="2"/>
+  <text x="82" y="96" fill="#ffdd44" font-family="Consolas, monospace" font-size="9">Elastic tether</text>
+  <!-- Force arrow -->
+  <line x1="45" y1="112" x2="73" y2="112" stroke="#44ddff" stroke-width="2" marker-end="url(#arrowCyan)"/>
+  <text x="82" y="116" fill="#44ddff" font-family="Consolas, monospace" font-size="9">Coupling force</text>
+  <!-- EVL line -->
+  <line x1="45" y1="132" x2="73" y2="132" stroke="#ff8844" stroke-width="3"/>
+  <text x="82" y="136" fill="#ff8844" font-family="Consolas, monospace" font-size="9">EVL margin</text>
+  <!-- DFC circle -->
+  <circle cx="59" cy="150" r="6" fill="#44ddff22" stroke="#44ddff" stroke-width="1.5"/>
+  <text x="82" y="154" fill="#44ddff" font-family="Consolas, monospace" font-size="9">DFC cell</text>
+
+  <!-- Formula box -->
+  <rect x="380" y="60" width="290" height="65" rx="6" fill="#161b22" stroke="#334455" stroke-width="1"/>
+  <text x="525" y="80" text-anchor="middle" fill="#ffdd44" font-family="Consolas, monospace" font-size="11" font-weight="bold">F = k * d * exp(-d / lambda)</text>
+  <text x="525" y="98" text-anchor="middle" fill="#888" font-family="Consolas, monospace" font-size="9">k = spring constant</text>
+  <text x="525" y="112" text-anchor="middle" fill="#888" font-family="Consolas, monospace" font-size="9">d = el_cell - el_EVL  |  lambda = 0.3 rad</text>
+
+  <!-- Force decay curve (small inset) -->
+  <rect x="420" y="130" width="250" height="52" rx="4" fill="#0d111766" stroke="#33445566"/>
+  <text x="430" y="143" fill="#666" font-family="Consolas, monospace" font-size="7">Force</text>
+  <!-- Curve: x*exp(-x) shape -->
+  <polyline points="440,172 455,158 470,150 485,147 500,148 515,153 530,158 545,162 560,165 575,167 590,168 605,169 620,170 635,170 650,170" fill="none" stroke="#44ddff88" stroke-width="1.5"/>
+  <!-- Peak marker -->
+  <circle cx="485" cy="147" r="2.5" fill="#ffdd44"/>
+  <text x="485" y="142" text-anchor="middle" fill="#ffdd4488" font-family="Consolas, monospace" font-size="7">peak at d=lambda</text>
+  <text x="650" y="143" text-anchor="end" fill="#666" font-family="Consolas, monospace" font-size="7">Distance d</text>
+</svg>

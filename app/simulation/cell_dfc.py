@@ -1,25 +1,50 @@
 """
 Deep Forming Cell (DFC) on a spherical embryo surface.
 
-DFCs are represented as deformable contours in spherical coordinates.
-Each cell has a center (azimuth, elevation, radius) and a discretized
-boundary of N vertices distributed around the center with Fourier-mode
-perturbations for biological realism.
+===== BIOLOGICAL CONTEXT =====
 
-The migration model uses a persistent random walk where cells maintain
-a directional bias for several steps before stochastic reorientation,
-modeling filopodial persistence observed in migrating cells.
+Dorsal Forerunner Cells (DFCs) are a group of ~20-30 cells in the
+zebrafish embryo that delaminate from the Enveloping Layer (EVL) and
+migrate collectively during epiboly. They maintain apical attachments
+to the EVL through tight junctions, creating an elastic tether that
+drags the cluster along as the EVL spreads vegetalward.
 
-Cell contour with deformation:
-    R(theta) = R_base * (1 + eps * sum_k cos(k*theta + phi_k(t)))
+DFCs eventually coalesce to form Kupffer's vesicle (KV), the
+left-right symmetry-breaking organizer. The integrity of the DFC
+cluster is maintained by E-cadherin-mediated cell-cell adhesion.
 
-where eps is the deformation amplitude and phi_k(t) are time-varying
-phases that create dynamic membrane fluctuations.
+===== MATHEMATICAL MODEL =====
 
-References:
-    - Oteiza et al. (2015), Cell collectivity during KV formation
-    - Ablooglu et al. (eLife 2021), DFC apical contacts and dragging
-    - Selmeczi et al. (2005), Cell motility as persistent random motion
+Cell position on the sphere:
+    Center: (azimuth phi, elevation theta, radius R) in spherical coordinates
+    x = R*cos(theta)*cos(phi),  y = R*cos(theta)*sin(phi),  z = R*sin(theta)
+
+Cell contour with Fourier deformation:
+    R_contour(alpha) = r_cell * (1 + eps * sum_k cos(k*alpha + psi_k(t)))
+    where k in {2,3,4,5} (avoids translation/size modes)
+
+Persistent random walk migration:
+    v = v_EVL + alpha*(cos theta_bias, sin theta_bias) + sigma*xi
+    Reorientation events at intervals tau in [8, 25] steps
+
+===== COORDINATE SYSTEM =====
+
+Uses the geographic convention:
+    azimuth  phi in [-pi, pi]  : longitude (east-west)
+    elevation theta in [-pi/2, pi/2] : latitude (south-north pole)
+    radius R > 0 : distance from center
+
+Cartesian mapping:
+    x = R*cos(theta)*cos(phi)
+    y = R*cos(theta)*sin(phi)
+    z = R*sin(theta)
+
+===== REFERENCES =====
+
+- Oteiza et al. (2015), Cell collectivity during KV formation
+- Ablooglu et al. (eLife 2021), DFC apical contacts and dragging
+- Selmeczi et al. (2005), Cell motility as persistent random motion
+- Compagnon & Bhatt (2019), Mechanisms of zebrafish epiboly
 """
 
 import numpy as np

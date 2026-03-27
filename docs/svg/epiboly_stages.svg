@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="400" viewBox="0 0 900 400">
+  <defs>
+    <style>
+      text { font-family: 'Segoe UI', Arial, sans-serif; }
+    </style>
+    <!-- Yolk gradient -->
+    <radialGradient id="yolkGrad" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#d4a017" stop-opacity="0.6"/>
+      <stop offset="100%" stop-color="#b8860b" stop-opacity="0.3"/>
+    </radialGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="900" height="400" fill="#0d1117"/>
+
+  <!-- Title -->
+  <text x="450" y="28" fill="#e6edf3" font-size="16" font-weight="bold" text-anchor="middle">Zebrafish Epiboly Stages (Side View Cross-Sections)</text>
+
+  <!-- Stage 1: 30% epiboly -->
+  <g transform="translate(30, 55)">
+    <text x="65" y="0" fill="#58a6ff" font-size="13" font-weight="bold" text-anchor="middle">30%</text>
+    <text x="65" y="14" fill="#8b949e" font-size="9" text-anchor="middle">~4.7 hpf</text>
+    <!-- Yolk cell (large circle) -->
+    <circle cx="65" cy="150" r="65" fill="url(#yolkGrad)" stroke="#b8860b" stroke-width="1"/>
+    <text x="65" y="175" fill="#b8860b" font-size="8" text-anchor="middle" opacity="0.7">Yolk</text>
+    <!-- YSL (yellow arc at margin) -->
+    <path d="M 18,118 A 65,65 0 0,1 112,118" fill="none" stroke="#d4a017" stroke-width="3" opacity="0.8"/>
+    <!-- EVL (red arc covering 30%) -->
+    <path d="M 8,130 A 68,68 0 0,1 122,130" fill="none" stroke="#da3633" stroke-width="2.5"/>
+    <!-- DEL (gray region under EVL) -->
+    <path d="M 15,125 C 25,95 45,80 65,78 C 85,80 105,95 115,125" fill="#8b949e" fill-opacity="0.25" stroke="none"/>
+    <!-- DFC cluster (cyan dots at dorsal margin) -->
+    <circle cx="55" cy="93" r="3" fill="#39d2e0"/>
+    <circle cx="65" cy="90" r="3" fill="#39d2e0"/>
+    <circle cx="75" cy="93" r="3" fill="#39d2e0"/>
+    <circle cx="60" cy="97" r="3" fill="#39d2e0"/>
+    <circle cx="70" cy="97" r="3" fill="#39d2e0"/>
+    <!-- Animal pole label -->
+    <text x="65" y="72" fill="#8b949e" font-size="7" text-anchor="middle">AP</text>
+    <!-- Margin arrow -->
+    <line x1="125" y1="130" x2="125" y2="145" stroke="#da3633" stroke-width="1" marker-end="url(#arrowRed)"/>
+  </g>
+
+  <!-- Stage 2: 50% epiboly -->
+  <g transform="translate(195, 55)">
+    <text x="65" y="0" fill="#58a6ff" font-size="13" font-weight="bold" text-anchor="middle">50%</text>
+    <text x="65" y="14" fill="#8b949e" font-size="9" text-anchor="middle">~5.3 hpf</text>
+    <circle cx="65" cy="150" r="65" fill="url(#yolkGrad)" stroke="#b8860b" stroke-width="1"/>
+    <text x="65" y="185" fill="#b8860b" font-size="8" text-anchor="middle" opacity="0.7">Yolk</text>
+    <!-- YSL -->
+    <path d="M 0,150 A 65,65 0 0,1 130,150" fill="none" stroke="#d4a017" stroke-width="3" opacity="0.8"/>
+    <!-- EVL covering 50% -->
+    <path d="M 0,150 A 68,68 0 0,1 130,150" fill="none" stroke="#da3633" stroke-width="2.5"/>
+    <!-- DEL -->
+    <path d="M 5,145 C 15,110 35,90 65,85 C 95,90 115,110 125,145" fill="#8b949e" fill-opacity="0.25" stroke="none"/>
+    <!-- DFC cluster slightly below top -->
+    <circle cx="52" cy="105" r="3" fill="#39d2e0"/>
+    <circle cx="62" cy="100" r="3" fill="#39d2e0"/>
+    <circle cx="72" cy="103" r="3" fill="#39d2e0"/>
+    <circle cx="57" cy="110" r="3" fill="#39d2e0"/>
+    <circle cx="67" cy="108" r="3" fill="#39d2e0"/>
+    <circle cx="77" cy="110" r="3" fill="#39d2e0"/>
+    <!-- Apical contact lines -->
+    <line x1="62" y1="100" x2="55" y2="90" stroke="#39d2e0" stroke-width="0.5" stroke-dasharray="2,1" opacity="0.6"/>
+    <line x1="72" y1="103" x2="78" y2="93" stroke="#39d2e0" stroke-width="0.5" stroke-dasharray="2,1" opacity="0.6"/>
+  </g>
+
+  <!-- Stage 3: 75% epiboly -->
+  <g transform="translate(360, 55)">
+    <text x="65" y="0" fill="#58a6ff" font-size="13" font-weight="bold" text-anchor="middle">75%</text>
+    <text x="65" y="14" fill="#8b949e" font-size="9" text-anchor="middle">~8.0 hpf</text>
+    <circle cx="65" cy="150" r="65" fill="url(#yolkGrad)" stroke="#b8860b" stroke-width="1"/>
+    <text x="65" y="200" fill="#b8860b" font-size="8" text-anchor="middle" opacity="0.7">Yolk</text>
+    <!-- YSL -->
+    <path d="M 12,185 A 65,65 0 0,1 118,185" fill="none" stroke="#d4a017" stroke-width="3" opacity="0.8"/>
+    <!-- EVL covering 75% -->
+    <path d="M 10,185 A 68,68 0 0,1 120,185" fill="none" stroke="#da3633" stroke-width="2.5"/>
+    <!-- DEL -->
+    <path d="M 8,180 C 15,140 35,100 65,90 C 95,100 115,140 122,180" fill="#8b949e" fill-opacity="0.2" stroke="none"/>
+    <!-- DFC cluster compacting -->
+    <circle cx="58" cy="140" r="3" fill="#39d2e0"/>
+    <circle cx="66" cy="136" r="3" fill="#39d2e0"/>
+    <circle cx="74" cy="140" r="3" fill="#39d2e0"/>
+    <circle cx="62" cy="145" r="3" fill="#39d2e0"/>
+    <circle cx="70" cy="145" r="3" fill="#39d2e0"/>
+    <circle cx="66" cy="150" r="3" fill="#39d2e0"/>
+    <!-- Weakened apical contacts (dashed, fading) -->
+    <line x1="66" y1="136" x2="60" y2="125" stroke="#39d2e0" stroke-width="0.4" stroke-dasharray="1,2" opacity="0.3"/>
+  </g>
+
+  <!-- Stage 4: 90% epiboly -->
+  <g transform="translate(525, 55)">
+    <text x="65" y="0" fill="#58a6ff" font-size="13" font-weight="bold" text-anchor="middle">90%</text>
+    <text x="65" y="14" fill="#8b949e" font-size="9" text-anchor="middle">~9.0 hpf</text>
+    <circle cx="65" cy="150" r="65" fill="url(#yolkGrad)" stroke="#b8860b" stroke-width="1"/>
+    <text x="65" y="208" fill="#b8860b" font-size="8" text-anchor="middle" opacity="0.7">Yolk</text>
+    <!-- YSL -->
+    <path d="M 30,205 A 65,65 0 0,1 100,205" fill="none" stroke="#d4a017" stroke-width="3" opacity="0.8"/>
+    <!-- EVL covering 90% -->
+    <path d="M 28,205 A 68,68 0 0,1 102,205" fill="none" stroke="#da3633" stroke-width="2.5"/>
+    <!-- DEL -->
+    <path d="M 5,195 C 12,150 30,110 65,95 C 100,110 118,150 125,195" fill="#8b949e" fill-opacity="0.15" stroke="none"/>
+    <!-- DFC cluster tight, near vegetal -->
+    <circle cx="60" cy="178" r="3" fill="#39d2e0"/>
+    <circle cx="68" cy="175" r="3" fill="#39d2e0"/>
+    <circle cx="64" cy="182" r="3" fill="#39d2e0"/>
+    <circle cx="72" cy="180" r="3" fill="#39d2e0"/>
+    <circle cx="56" cy="180" r="3" fill="#39d2e0"/>
+    <circle cx="64" cy="188" r="3" fill="#39d2e0"/>
+    <circle cx="72" cy="186" r="3" fill="#39d2e0"/>
+    <!-- No apical contacts -->
+  </g>
+
+  <!-- Stage 5: 100% epiboly -->
+  <g transform="translate(690, 55)">
+    <text x="65" y="0" fill="#58a6ff" font-size="13" font-weight="bold" text-anchor="middle">100%</text>
+    <text x="65" y="14" fill="#8b949e" font-size="9" text-anchor="middle">~10.3 hpf</text>
+    <circle cx="65" cy="150" r="65" fill="url(#yolkGrad)" stroke="#b8860b" stroke-width="1"/>
+    <!-- EVL fully enveloping -->
+    <circle cx="65" cy="150" r="67" fill="none" stroke="#da3633" stroke-width="2"/>
+    <!-- DEL thin layer -->
+    <circle cx="65" cy="150" r="63" fill="#8b949e" fill-opacity="0.1" stroke="none"/>
+    <!-- DFC rosette / KV at vegetal pole -->
+    <circle cx="65" cy="210" r="8" fill="none" stroke="#39d2e0" stroke-width="1.5"/>
+    <circle cx="61" cy="207" r="2" fill="#39d2e0"/>
+    <circle cx="69" cy="207" r="2" fill="#39d2e0"/>
+    <circle cx="65" cy="213" r="2" fill="#39d2e0"/>
+    <circle cx="60" cy="213" r="2" fill="#39d2e0"/>
+    <circle cx="70" cy="213" r="2" fill="#39d2e0"/>
+    <circle cx="65" cy="207" r="2" fill="#39d2e0"/>
+    <!-- KV label -->
+    <text x="65" y="230" fill="#39d2e0" font-size="8" text-anchor="middle">KV</text>
+    <!-- VP label -->
+    <text x="65" y="222" fill="#8b949e" font-size="7" text-anchor="middle" opacity="0.0">VP</text>
+  </g>
+
+  <!-- Legend -->
+  <g transform="translate(30, 330)">
+    <rect x="0" y="0" width="840" height="55" rx="5" fill="#161b22" stroke="#30363d" stroke-width="1"/>
+    <text x="15" y="18" fill="#e6edf3" font-size="10" font-weight="bold">Legend:</text>
+    <!-- EVL -->
+    <line x1="80" y1="14" x2="105" y2="14" stroke="#da3633" stroke-width="2.5"/>
+    <text x="110" y="18" fill="#e6edf3" font-size="9">EVL (Enveloping Layer)</text>
+    <!-- DEL -->
+    <rect x="250" y="8" width="20" height="10" fill="#8b949e" fill-opacity="0.3"/>
+    <text x="275" y="18" fill="#e6edf3" font-size="9">DEL (Deep Cell Layer)</text>
+    <!-- YSL -->
+    <line x1="420" y1="14" x2="445" y2="14" stroke="#d4a017" stroke-width="3" opacity="0.8"/>
+    <text x="450" y="18" fill="#e6edf3" font-size="9">YSL (Yolk Syncytial Layer)</text>
+    <!-- DFC -->
+    <circle cx="618" cy="13" r="3" fill="#39d2e0"/>
+    <text x="627" y="18" fill="#e6edf3" font-size="9">DFC cluster</text>
+    <!-- Yolk -->
+    <circle cx="720" cy="13" r="6" fill="url(#yolkGrad)" stroke="#b8860b" stroke-width="0.5"/>
+    <text x="732" y="18" fill="#e6edf3" font-size="9">Yolk cell</text>
+    <!-- Timing note -->
+    <text x="15" y="42" fill="#8b949e" font-size="8">hpf = hours post-fertilization at 28.5C. Timing from Kimmel et al. (1995). DFC specification, delamination, and KV formation based on Oteiza et al. (2008) and Ablooglu et al. (2021).</text>
+  </g>
+</svg>

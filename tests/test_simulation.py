@@ -54,7 +54,7 @@ def test_full_simulation_50_steps():
 
     for step in range(50):
         env.update()
-        layer.update(env.margin_velocity)
+        layer.update(env.margin_velocity, evl_elevation=env.margin_elevation)
 
     assert layer.step_count == 50
     assert env.step_count == 50
@@ -79,7 +79,7 @@ def test_state_serialization():
     layer.initialize(embryo_radius=1000, num_cells=6, num_vertices=20)
 
     env.update()
-    layer.update(env.margin_velocity)
+    layer.update(env.margin_velocity, evl_elevation=env.margin_elevation)
 
     state = layer.get_state()
     assert 'step' in state
@@ -87,6 +87,14 @@ def test_state_serialization():
     assert 'cells' in state
     assert state['step'] == 1
     assert len(state['cells']) == state['num_cells']
+
+    # Verify new cluster metric keys
+    assert 'cluster_spread' in state
+    assert 'cluster_elongation' in state
+    assert 'cluster_centroid' in state
+    assert isinstance(state['cluster_spread'], float)
+    assert isinstance(state['cluster_elongation'], float)
+    assert len(state['cluster_centroid']) == 3
 
     env_state = env.get_state()
     assert 'embryo_radius' in env_state

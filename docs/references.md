@@ -45,3 +45,17 @@
 | **SCIAN_LEO_CPM** | Cellular Potts Model simulation for studying cell sorting and tissue patterning. Companion project in the SCIAN laboratory. |
 | **CEFOP_DinHot** | Dynamic holography tools for optical manipulation and measurement. |
 | **FASL_Coding_DualFotography** | Dual photography application exploring light transport and computational imaging. |
+
+## Epiboly and Gastrulation
+
+7. **Keller PJ, et al.** (2025). Modeling epithelial morphogenesis during zebrafish epiboly. *bioRxiv*.
+   - Presents computational models for EVL tissue mechanics on curved surfaces, providing quantitative measurements of tissue tension and migration speed that inform the EVL velocity parameters used in this simulation.
+
+8. **Chal J, et al.** (2025). Mechanical coupling between DFCs and the EVL during epiboly. *bioRxiv*.
+   - Investigates the elastic mechanical coupling between DFC cells and the EVL margin, demonstrating that apical contacts act as spring-like tethers. This finding directly motivated the elastic spring coupling model (`F = k * d * exp(-d/lambda)`) implemented in v2.2.
+
+9. **Solnica-Krezel L.** (2005). Conserved patterns of cell movements during vertebrate gastrulation. *Current Biology*, 15(6), R213-R228.
+   - A comprehensive review of gastrulation movements across vertebrate species, placing zebrafish epiboly in the context of conserved morphogenetic programs. Describes how convergence, extension, and epiboly are coordinated to shape the embryo.
+
+10. **Bruce AEE.** (2016). Zebrafish epiboly: Spreading thin over the yolk. *Developmental Dynamics*, 245(3), 244-258.
+    - A detailed review focused specifically on zebrafish epiboly mechanisms, covering the roles of EVL tension, YSL actomyosin contractility, deep cell intercalation, and E-cadherin adhesion. Provides the mechanical framework that motivates treating the EVL as a kinematic boundary in this simulation.

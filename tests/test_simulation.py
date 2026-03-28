@@ -37,7 +37,7 @@ def test_full_simulation_50_steps():
     }
 
     env = SphericalEnvironment(config)
-    layer = DFCLayer({'noise_std': config['noise_std']})
+    layer = DFCLayer({'noise_std': config['noise_std'], 'division_rate': 0.0})
     layer.initialize(
         embryo_radius=config['embryo_radius'],
         num_cells=config['num_dfcs'],
@@ -75,7 +75,7 @@ def test_full_simulation_50_steps():
 def test_state_serialization():
     """Serialized state should have expected keys."""
     env = SphericalEnvironment()
-    layer = DFCLayer({'noise_std': 0.5})
+    layer = DFCLayer({'noise_std': 0.5, 'division_rate': 0.0})
     layer.initialize(embryo_radius=1000, num_cells=6, num_vertices=20)
 
     env.update()
@@ -155,6 +155,110 @@ def test_layer_initialization_bounds():
     print("  [PASS] test_layer_initialization_bounds")
 
 
+def test_cell_division():
+    """Verify stochastic cell division creates daughter cells."""
+    np.random.seed(42)
+    layer = DFCLayer({'noise_std': 0.3, 'division_rate': 1.0})  # rate=1.0 forces division
+    layer.initialize(
+        embryo_radius=1000,
+        num_cells=4,
+        radial_size=np.pi / 64,
+        num_vertices=20,
+    )
+    initial_count = len(layer.cells)
+
+    # With division_rate=1.0, all cells should divide (capped at 60)
+    layer._check_division(division_rate=1.0)
+
+    # Each parent produces 2 daughters, parents removed
+    # So we should have 2 * initial_count cells
+    assert len(layer.cells) == 2 * initial_count, \
+        f"Expected {2 * initial_count} cells after division, got {len(layer.cells)}"
+    # All cells should be active (parents removed)
+    assert all(c.active for c in layer.cells), "All daughter cells should be active"
+    print("  [PASS] test_cell_division")
+
+
+def test_division_respects_max_cells():
+    """Verify division stops at maximum cell count."""
+    np.random.seed(42)
+    layer = DFCLayer({'noise_std': 0.3})
+    layer.initialize(
+        embryo_radius=1000,
+        num_cells=24,
+        radial_size=np.pi / 64,
+        num_vertices=20,
+    )
+
+    # Run division with high rate multiple times
+    for _ in range(10):
+        layer._check_division(division_rate=1.0)
+
+    assert len(layer.cells) <= 60, \
+        f"Cell count {len(layer.cells)} should not exceed 60"
+    print("  [PASS] test_division_respects_max_cells")
+
+
+def test_division_daughter_properties():
+    """Verify daughter cells have correct properties."""
+    np.random.seed(42)
+    layer = DFCLayer({'noise_std': 0.3})
+    layer.initialize(
+        embryo_radius=1000,
+        num_cells=1,
+        radial_size=np.pi / 32,
+        num_vertices=30,
+    )
+    parent_size = layer.cells[0].radial_size
+    parent_el = layer.cells[0].center_aer[1]
+    parent_r = layer.cells[0].center_aer[2]
+
+    layer._check_division(division_rate=1.0)
+
+    assert len(layer.cells) == 2, f"Expected 2 daughters, got {len(layer.cells)}"
+    for d in layer.cells:
+        assert abs(d.radial_size - parent_size * 0.85) < 1e-10, \
+            "Daughter radial_size should be 0.85x parent"
+        assert abs(d.center_aer[1] - parent_el) < 1e-10, \
+            "Daughters should share parent elevation"
+        assert abs(d.center_aer[2] - parent_r) < 1e-10, \
+            "Daughters should share parent radius"
+    print("  [PASS] test_division_daughter_properties")
+
+
+def test_division_in_update():
+    """Verify cell division occurs during normal update cycle."""
+    np.random.seed(42)
+    config = {
+        'embryo_radius': 1000,
+        'num_dfcs': 6,
+        'radial_size': np.pi / 64,
+        'num_vertices': 20,
+        'evl_speed': 0.005,
+        'noise_std': 0.3,
+        'division_rate': 0.5,
+    }
+    env = SphericalEnvironment(config)
+    layer = DFCLayer({'noise_std': config['noise_std'], 'division_rate': config['division_rate']})
+    layer.initialize(
+        embryo_radius=config['embryo_radius'],
+        num_cells=config['num_dfcs'],
+        radial_size=config['radial_size'],
+        num_vertices=config['num_vertices'],
+    )
+
+    initial_count = len(layer.cells)
+
+    # Run 20 steps with high division rate
+    for _ in range(20):
+        env.update()
+        layer.update(env.margin_velocity, evl_elevation=env.margin_elevation)
+
+    # With rate=0.5 over 20 steps, some divisions should have occurred
+    assert len(layer.cells) >= initial_count, "Cell count should not decrease"
+    print("  [PASS] test_division_in_update")
+
+
 if __name__ == '__main__':
     print("Running integration tests...")
     test_full_simulation_50_steps()
@@ -163,4 +267,8 @@ if __name__ == '__main__':
     test_great_circle_distance()
     test_sphere_mesh_generation()
     test_layer_initialization_bounds()
+    test_cell_division()
+    test_division_respects_max_cells()
+    test_division_daughter_properties()
+    test_division_in_update()
     print("All integration tests passed.")

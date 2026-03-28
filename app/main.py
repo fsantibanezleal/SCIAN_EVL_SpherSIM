@@ -185,7 +185,7 @@ async def ws_sim(websocket: WebSocket):
             # Step and broadcast if running
             if sim_state["running"] and sim_state["dfc_layer"]:
                 sim_state["env"].update()
-                sim_state["dfc_layer"].update(sim_state["env"].margin_velocity)
+                sim_state["dfc_layer"].update(sim_state["env"].margin_velocity, evl_elevation=sim_state["env"].margin_elevation)
                 state = {
                     "dfc_layer": sim_state["dfc_layer"].get_state(),
                     "environment": sim_state["env"].get_state(),

@@ -22,6 +22,10 @@ The embryo is modeled as a sphere. DFC cells are represented as circular contour
 
 The browser interface provides a 3D viewport with orbit controls (rotate, pan, zoom) and a right-side panel for simulation parameters and playback controls.
 
+## Frontend
+
+![Frontend](docs/png/frontend.png)
+
 ## Quick Start
 
 ```bash

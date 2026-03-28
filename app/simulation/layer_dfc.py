@@ -171,6 +171,54 @@ class DFCLayer:
 
         return vel
 
+    def _check_division(self, division_rate=0.005):
+        """Stochastic cell division on the sphere surface.
+
+        Each cell has a small probability per step of dividing.
+        Division axis is perpendicular to the cluster migration
+        direction (approximated by the EVL velocity direction).
+
+        Daughter cells are placed along the division axis at
+        +/-0.6*radial_size from the parent, with slightly smaller
+        radial size (0.85x) to conserve approximate area.
+        """
+        new_cells = []
+        for cell in self.cells:
+            if not cell.active:
+                continue
+            if np.random.random() > division_rate:
+                continue
+            if len(self.cells) + len(new_cells) >= 60:  # max cells
+                break
+
+            # Division axis: perpendicular to elevation (along azimuth)
+            div_offset = cell.radial_size * 0.6
+            daughter_size = cell.radial_size * 0.85
+
+            # Daughter 1: offset in +azimuth
+            d1 = CellDFC(
+                azimuth=cell.center_aer[0] + div_offset,
+                elevation=cell.center_aer[1],
+                radius=cell.center_aer[2],
+                radial_size=daughter_size,
+                num_vertices=cell.num_vertices,
+            )
+            # Daughter 2: offset in -azimuth
+            d2 = CellDFC(
+                azimuth=cell.center_aer[0] - div_offset,
+                elevation=cell.center_aer[1],
+                radius=cell.center_aer[2],
+                radial_size=daughter_size,
+                num_vertices=cell.num_vertices,
+            )
+
+            cell.active = False  # Parent deactivated
+            new_cells.extend([d1, d2])
+
+        self.cells.extend(new_cells)
+        # Remove inactive
+        self.cells = [c for c in self.cells if c.active]
+
     def update(self, margin_velocity: np.ndarray, evl_elevation: float | None = None):
         """Update all DFC cells with EVL coupling and collective dynamics.
 
@@ -211,6 +259,10 @@ class DFCLayer:
             adhesion_enabled=self.adhesion_enabled,
             adhesion_strength=self.adhesion_strength,
         )
+
+        # Stochastic cell division (low probability per step)
+        self._check_division(division_rate=self.config.get("division_rate", 0.005))
+
         self.step_count += 1
 
     def compute_cluster_metrics(self) -> dict:

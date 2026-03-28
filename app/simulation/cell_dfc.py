@@ -198,25 +198,26 @@ class CellDFC:
         """
         angles = np.linspace(0, 2 * np.pi, self.num_vertices, endpoint=False)
 
-        # Fourier-mode deformation for biological realism
+        # Fourier deformation (already vectorized)
         deformation = np.zeros(self.num_vertices)
         for k in range(len(self.deformation_phases)):
-            # Modes k+2 to avoid pure translation (k=1) and size change (k=0)
             deformation += np.cos((k + 2) * angles + self.deformation_phases[k])
-        # Normalize by number of modes to keep amplitude controlled
         deformation *= self.deformation_amplitude / len(self.deformation_phases)
-
-        # Perturbed radial size for each vertex
         perturbed_size = self.radial_size * (1.0 + deformation)
 
-        for i, angle in enumerate(angles):
-            az = self.center_aer[0] + perturbed_size[i] * np.cos(angle)
-            el = self.center_aer[1] + perturbed_size[i] * np.sin(angle)
-            r = self.center_aer[2]
+        # Vectorized AER computation (no Python loop)
+        az = self.center_aer[0] + perturbed_size * np.cos(angles)  # (N,)
+        el = self.center_aer[1] + perturbed_size * np.sin(angles)  # (N,)
+        r = np.full(self.num_vertices, self.center_aer[2])          # (N,)
 
-            self.contour_aer[i] = [az, el, r]
-            x, y, z = spherical_to_cartesian(az, el, r)
-            self.contour_xyz[i] = [x, y, z]
+        self.contour_aer[:, 0] = az
+        self.contour_aer[:, 1] = el
+        self.contour_aer[:, 2] = r
+
+        # Vectorized spherical to Cartesian
+        self.contour_xyz[:, 0] = r * np.cos(el) * np.cos(az)
+        self.contour_xyz[:, 1] = r * np.cos(el) * np.sin(az)
+        self.contour_xyz[:, 2] = r * np.sin(el)
 
     # ------------------------------------------------------------------
     # Public API

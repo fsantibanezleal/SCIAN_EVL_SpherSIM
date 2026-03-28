@@ -23,7 +23,7 @@ from pathlib import Path
 
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 from fastapi.staticfiles import StaticFiles
-from fastapi.responses import FileResponse
+from fastapi.responses import FileResponse, StreamingResponse
 from pydantic import BaseModel
 
 from .simulation.layer_dfc import DFCLayer
@@ -48,6 +48,7 @@ sim_state: dict = {
     "dfc_layer": None,
     "running": False,
     "speed": 50,
+    "metrics_history": [],
 }
 
 # ---------------------------------------------------------------------------
@@ -104,6 +105,7 @@ async def init_sim(config: SimConfig):
     )
     sim_state["speed"] = config.speed_ms
     sim_state["running"] = False
+    sim_state["metrics_history"] = []
 
     return {
         "status": "initialized",
@@ -135,6 +137,10 @@ async def step():
     env.update()
     sim_state["dfc_layer"].update(env.margin_velocity, evl_elevation=env.margin_elevation)
 
+    # Accumulate metrics for CSV export
+    metrics = sim_state["dfc_layer"].compute_cluster_metrics()
+    sim_state["metrics_history"].append(metrics)
+
     return {
         "dfc_layer": sim_state["dfc_layer"].get_state(),
         "environment": env.get_state(),
@@ -151,6 +157,31 @@ async def get_state():
         "dfc_layer": sim_state["dfc_layer"].get_state(),
         "environment": sim_state["env"].get_state(),
     }
+
+
+@app.get("/api/simulation/export-csv")
+async def export_csv():
+    """Export accumulated simulation metrics as CSV download."""
+    import io
+    import csv
+
+    history = sim_state.get("metrics_history", [])
+    if not history:
+        return {"error": "No simulation history. Run the simulation first."}
+
+    output = io.StringIO()
+    keys = list(history[0].keys())
+    writer = csv.DictWriter(output, fieldnames=['step'] + keys)
+    writer.writeheader()
+    for i, row in enumerate(history):
+        writer.writerow({'step': i, **{k: row.get(k, '') for k in keys}})
+
+    output.seek(0)
+    return StreamingResponse(
+        iter([output.getvalue()]),
+        media_type="text/csv",
+        headers={"Content-Disposition": "attachment; filename=simulation_metrics.csv"}
+    )
 
 
 # ---------------------------------------------------------------------------
@@ -190,6 +221,11 @@ async def ws_sim(websocket: WebSocket):
             if sim_state["running"] and sim_state["dfc_layer"]:
                 sim_state["env"].update()
                 sim_state["dfc_layer"].update(sim_state["env"].margin_velocity, evl_elevation=sim_state["env"].margin_elevation)
+
+                # Accumulate metrics for CSV export
+                metrics = sim_state["dfc_layer"].compute_cluster_metrics()
+                sim_state["metrics_history"].append(metrics)
+
                 state = {
                     "dfc_layer": sim_state["dfc_layer"].get_state(),
                     "environment": sim_state["env"].get_state(),

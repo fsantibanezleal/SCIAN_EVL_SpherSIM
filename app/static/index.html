@@ -75,6 +75,9 @@
                     <button id="btn-pause" title="Pause the running simulation" disabled>Pause</button>
                     <button id="btn-step" title="Advance the simulation by a single time step">Step</button>
                 </div>
+                <div class="btn-row" style="margin-top: 6px;">
+                    <button id="btn-download-csv" title="Download simulation metrics history as CSV">Download CSV</button>
+                </div>
             </section>
 
             <section class="panel-section">
@@ -167,6 +170,16 @@
     <script src="/static/js/renderer3d.js"></script>
     <script src="/static/js/controls.js"></script>
     <script src="/static/js/app.js"></script>
+
+    <!-- CSV download handler -->
+    <script>
+    (function () {
+        var btnCSV = document.getElementById('btn-download-csv');
+        btnCSV.addEventListener('click', function () {
+            window.location.href = '/api/simulation/export-csv';
+        });
+    })();
+    </script>
 
     <!-- Help modal and section help toggle logic -->
     <script>

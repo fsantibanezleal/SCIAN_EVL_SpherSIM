@@ -375,6 +375,24 @@ class DFCLayer:
             'num_active': len(active),
         }
 
+    def export_metrics_csv(self, filepath: str, history: list):
+        """Export simulation metrics history to CSV.
+
+        Args:
+            filepath: Output CSV file path.
+            history: List of dicts from compute_cluster_metrics() at each step.
+        """
+        import csv
+        if not history:
+            return
+        keys = list(history[0].keys())
+        with open(filepath, 'w', newline='') as f:
+            writer = csv.DictWriter(f, fieldnames=['step'] + keys)
+            writer.writeheader()
+            for i, row in enumerate(history):
+                row_with_step = {'step': i, **row}
+                writer.writerow(row_with_step)
+
     def get_state(self) -> dict:
         """Return a JSON-serializable snapshot of the layer.
 

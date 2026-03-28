@@ -63,6 +63,7 @@ class DFCLayer:
         self.adhesion_enabled = config.get("adhesion_enabled", True)
         self.adhesion_strength = config.get("adhesion_strength", 0.001)
         self.spring_constant = config.get("spring_constant", 0.01)
+        self.ring_strength = config.get("ring_strength", 0.005)
 
     def initialize(
         self,
@@ -171,6 +172,64 @@ class DFCLayer:
 
         return vel
 
+    def _compute_ysl_ring_force(self, cell, evl_elevation, ring_strength=0.005):
+        """Compute tangential contractile force from YSL actomyosin ring.
+
+        ===== BIOLOGICAL MODEL =====
+
+        The YSL has a circumferential actomyosin ring at the leading edge
+        of the EVL margin. This ring generates contractile tension that:
+        1. Drives margin advancement (epiboly motor)
+        2. Pulls nearby DFC cells tangentially toward the margin midline
+
+        The force is strongest for cells close to the margin and tangential
+        (along azimuth), pulling cells toward the cluster centroid azimuth:
+
+            F_ring = -k_ring * (az_cell - az_centroid) * exp(-d_margin / lambda_ring)
+
+        where:
+            k_ring = contractile strength
+            az_cell, az_centroid = cell and cluster azimuthal positions
+            d_margin = elevation distance from cell to EVL margin
+            lambda_ring = decay length (~0.2 radians)
+
+        This creates a convergence force that compacts the DFC cluster
+        azimuthally as it migrates vegetalward.
+
+        Args:
+            cell: CellDFC instance.
+            evl_elevation: Current EVL margin elevation.
+            ring_strength: Contractile force magnitude.
+
+        Returns:
+            Velocity contribution [dAz, dEl, dR].
+        """
+        vel = np.zeros(3)
+
+        # Distance from cell to margin
+        d_margin = abs(cell.center_aer[1] - evl_elevation)
+
+        # Only affects cells within ~0.5 radians of margin
+        if d_margin > 0.5:
+            return vel
+
+        # Compute cluster centroid azimuth
+        active_cells = [c for c in self.cells if c.active]
+        if len(active_cells) < 2:
+            return vel
+        centroid_az = np.mean([c.center_aer[0] for c in active_cells])
+
+        # Tangential convergence force (azimuthal, toward centroid)
+        az_offset = cell.center_aer[0] - centroid_az
+        # Wrap to [-pi, pi]
+        az_offset = (az_offset + np.pi) % (2 * np.pi) - np.pi
+
+        # Force decays with distance from margin
+        decay = np.exp(-d_margin / 0.2)
+        vel[0] = -ring_strength * az_offset * decay
+
+        return vel
+
     def _check_division(self, division_rate=0.005):
         """Stochastic cell division on the sphere surface.
 
@@ -247,7 +306,10 @@ class DFCLayer:
                 evl_force = self._compute_evl_coupling_force(
                     cell, evl_elevation, spring_constant=self.spring_constant
                 )
-                effective_vel = margin_velocity.copy() + evl_force
+                ring_force = self._compute_ysl_ring_force(
+                    cell, evl_elevation, ring_strength=self.ring_strength
+                )
+                effective_vel = margin_velocity.copy() + evl_force + ring_force
             else:
                 effective_vel = margin_velocity.copy()
 

@@ -64,6 +64,7 @@ class SimConfig(BaseModel):
     num_vertices: int = 100
     evl_speed: float = 0.005
     noise_std: float = 0.5
+    ring_strength: float = 0.005
     speed_ms: int = 50
 
 
@@ -91,7 +92,10 @@ async def init_sim(config: SimConfig):
     }
 
     sim_state["env"] = SphericalEnvironment(env_config)
-    sim_state["dfc_layer"] = DFCLayer({"noise_std": config.noise_std})
+    sim_state["dfc_layer"] = DFCLayer({
+        "noise_std": config.noise_std,
+        "ring_strength": config.ring_strength,
+    })
     sim_state["dfc_layer"].initialize(
         embryo_radius=config.embryo_radius,
         num_cells=config.num_dfcs,

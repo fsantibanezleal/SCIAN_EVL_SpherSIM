@@ -205,8 +205,12 @@ class CellDFC:
         deformation *= self.deformation_amplitude / len(self.deformation_phases)
         perturbed_size = self.radial_size * (1.0 + deformation)
 
+        # Metric compensation: at elevation el, azimuthal distances shrink
+        # by cos(el). Expand the azimuthal component to conserve area.
+        cos_el = max(np.cos(self.center_aer[1]), 0.1)  # Clamp to avoid singularity at poles
+
         # Vectorized AER computation (no Python loop)
-        az = self.center_aer[0] + perturbed_size * np.cos(angles)  # (N,)
+        az = self.center_aer[0] + perturbed_size * np.cos(angles) / cos_el  # (N,)
         el = self.center_aer[1] + perturbed_size * np.sin(angles)  # (N,)
         r = np.full(self.num_vertices, self.center_aer[2])          # (N,)
 

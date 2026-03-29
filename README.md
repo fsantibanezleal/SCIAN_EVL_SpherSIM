@@ -10,6 +10,20 @@ DFCs are the precursor cells of Kupffer's vesicle, the zebrafish organ responsib
 
 During zebrafish epiboly, the EVL spreads vegetalward dragging DFCs through elastic apical attachments. This migration occurs on a curved spherical surface where standard flat-geometry collision detection fails near the poles. Correct geodesic mechanics are essential for biologically accurate simulation.
 
+![Epiboly Stages](docs/svg/epiboly_stages.svg)
+
+---
+
+## KPIs & Metrics
+
+| Metric | Target | Current |
+|--------|--------|---------|
+| Geodesic distance | Exact on sphere | Haversine formula |
+| Collision resolution | Latitude-independent | Cartesian tangent-plane push |
+| EVL coupling | Distance-dependent | F=k·d·exp(−d/λ) spring |
+| Cluster metrics | Centroid, spread, elongation | Real-time computation |
+| Test coverage | Comprehensive | 24 tests passing |
+
 ---
 
 ## Mathematical Model

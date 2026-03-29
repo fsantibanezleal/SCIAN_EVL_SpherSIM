@@ -62,8 +62,10 @@ python -m uvicorn app.main:app --reload --port 8002
 ```
 SCIAN_EVL_SpherSIM/
 ├── app/
+│   ├── __init__.py
 │   ├── main.py                   # FastAPI application, REST + WebSocket endpoints
 │   ├── simulation/
+│   │   ├── __init__.py
 │   │   ├── cell_dfc.py           # Individual DFC cell model (AER position, contour, update)
 │   │   ├── layer_dfc.py          # DFC population management (grid init, collective update)
 │   │   ├── layer_evl.py          # EVL margin kinematic model (latitude moves vegetalward)
@@ -71,6 +73,7 @@ SCIAN_EVL_SpherSIM/
 │   │   ├── collision.py          # Pairwise collision detection and resolution
 │   │   └── geometry.py           # Coordinate conversions, great-circle distance, mesh generation
 │   ├── api/
+│   │   ├── __init__.py
 │   │   └── routes.py             # Reserved for future endpoint expansion
 │   └── static/
 │       ├── index.html            # Single-page application shell
@@ -81,17 +84,32 @@ SCIAN_EVL_SpherSIM/
 │           ├── controls.js       # Parameter panel and status display
 │           └── websocket.js      # WebSocket client with auto-reconnect
 ├── tests/
+│   ├── __init__.py
 │   ├── test_cell.py              # 10 tests: cell creation, update, wrapping, serialization
 │   ├── test_collision.py         # 7 tests: distance, overlap, resolution, symmetry
 │   └── test_simulation.py        # 6 tests: pipeline, serialization, geometry, bounds
 ├── docs/
 │   ├── architecture.md           # System design and API reference
 │   ├── biological_model.md       # Zebrafish biology and simulation model
+│   ├── epiboly_biology.md        # Epiboly process biology
 │   ├── development_history.md    # Changelog from MATLAB v1.x to Python v2.0
 │   ├── references.md             # Academic papers and software libraries
 │   ├── user_guide.md             # Installation, usage, and troubleshooting
-│   └── svg/                      # Diagrams (architecture, model, flow, coordinates, app)
+│   ├── png/
+│   │   └── frontend.png          # Frontend screenshot
+│   └── svg/
+│       ├── architecture.svg      # System architecture diagram
+│       ├── spherical_model.svg   # Spherical embryo model
+│       ├── simulation_flow.svg   # Simulation step pipeline
+│       ├── coordinate_system.svg # AER coordinate system
+│       ├── cartesian_push.svg    # Cartesian push collision diagram
+│       ├── epiboly_stages.svg    # Epiboly progression stages
+│       ├── evl_coupling.svg      # EVL drag coupling diagram
+│       └── app_screenshot.svg    # Application interface mockup
 ├── legacy/                       # Original MATLAB code and GUIDE files
+├── build.spec                    # PyInstaller spec file
+├── Build_PyInstaller.ps1         # PowerShell build script
+├── run_app.py                    # Uvicorn launcher with auto-browser
 └── requirements.txt              # Pinned Python dependencies
 ```
 

@@ -4,17 +4,74 @@
 
 DFCs are the precursor cells of Kupffer's vesicle, the zebrafish organ responsible for establishing left-right body asymmetry. This simulation models how DFCs are carried vegetalward by the advancing EVL (Enveloping Layer) margin, subject to stochastic noise and inter-cell collision constraints. The project is a complete rewrite of a legacy MATLAB implementation, designed for accessibility, real-time interactivity, and modularity.
 
-## Architecture
+---
 
-![Architecture](docs/svg/architecture.svg)
+## Motivation & Problem
 
-The system consists of a FastAPI server that runs the simulation engine and a Three.js frontend that renders the results in real time. Communication happens over REST (for initialization and control) and WebSocket (for continuous state streaming during playback).
+During zebrafish epiboly, the EVL spreads vegetalward dragging DFCs through elastic apical attachments. This migration occurs on a curved spherical surface where standard flat-geometry collision detection fails near the poles. Correct geodesic mechanics are essential for biologically accurate simulation.
+
+---
+
+## Mathematical Model
+
+### Haversine Great-Circle Distance
+
+The geodesic distance between two cells on the embryo sphere is computed using the Haversine formula:
+
+```
+d = 2 * arcsin(sqrt(sin^2(Delta_phi / 2) + cos(phi_1) * cos(phi_2) * sin^2(Delta_lambda / 2)))
+```
+
+where `phi` is elevation (latitude) and `lambda` is azimuth (longitude).
+
+### EVL Drag Force
+
+Each DFC is coupled to the advancing EVL margin by an exponentially decaying spring:
+
+```
+F_EVL = k * d * exp(-d / lambda)
+```
+
+where `k` is the coupling stiffness, `d` is the distance to the EVL margin, and `lambda` is the decay length scale.
+
+### Ring Confinement Force
+
+A lateral restoring force prevents DFCs from escaping the cluster azimuthally:
+
+```
+F_ring = -k_ring * Delta_az * exp(-d_margin / lambda)
+```
+
+where `Delta_az` is the azimuthal deviation from the cluster center and `d_margin` is the distance to the EVL margin.
+
+### Spherical Metric
+
+The surface line element on the embryo sphere of radius R:
+
+```
+ds^2 = R^2 * (d_theta^2 + cos^2(theta) * d_phi^2)
+```
+
+### Cluster Spread and Elongation
+
+Summary statistics for the DFC cluster geometry:
+
+```
+Spread:      sigma = sqrt(mean(d^2))
+Elongation:  e = sqrt(lambda_max / lambda_min)
+```
+
+where `d` is the great-circle distance of each cell from the cluster centroid, and `lambda_max`, `lambda_min` are the eigenvalues of the 2D inertia tensor of cell positions projected onto the tangent plane.
+
+---
 
 ## Spherical Embryo Model
 
 ![Spherical Model](docs/svg/spherical_model.svg)
 
 The embryo is modeled as a sphere. DFC cells are represented as circular contours on the sphere surface, tracked in AER (Azimuth-Elevation-Radius) coordinates. The EVL margin is a latitude line that moves steadily toward the vegetal pole, dragging the DFC cluster along with it.
+
+---
 
 ## Application
 
@@ -25,6 +82,31 @@ The browser interface provides a 3D viewport with orbit controls (rotate, pan, z
 ## Frontend
 
 ![Frontend](docs/png/frontend.png)
+
+---
+
+## Architecture
+
+![Architecture](docs/svg/architecture.svg)
+
+The system consists of a FastAPI server that runs the simulation engine and a Three.js frontend that renders the results in real time. Communication happens over REST (for initialization and control) and WebSocket (for continuous state streaming during playback).
+
+---
+
+## Features
+
+- Interactive 3D visualization of the embryo sphere and DFC cells using Three.js with WebGL
+- Real-time simulation streaming via WebSocket at configurable tick intervals
+- Configurable parameters: cell count, radial size, EVL speed, noise amplitude, and more
+- Orbit controls for rotation, pan, and zoom with mouse or touch
+- Play / Pause / Step controls for continuous or frame-by-frame simulation
+- Wireframe overlay, axes helper, and cell center markers as toggleable view options
+- Dark theme UI with blue accent color scheme
+- Pairwise collision detection and symmetric resolution to prevent cell overlap
+- AER coordinate system with automatic wrapping (azimuth) and clamping (elevation)
+- 23 automated tests covering cells, collisions, geometry, and full simulation pipeline
+
+---
 
 ## Quick Start
 
@@ -44,18 +126,7 @@ python -m uvicorn app.main:app --reload --port 8002
 # Open http://localhost:8002
 ```
 
-## Features
-
-- Interactive 3D visualization of the embryo sphere and DFC cells using Three.js with WebGL
-- Real-time simulation streaming via WebSocket at configurable tick intervals
-- Configurable parameters: cell count, radial size, EVL speed, noise amplitude, and more
-- Orbit controls for rotation, pan, and zoom with mouse or touch
-- Play / Pause / Step controls for continuous or frame-by-frame simulation
-- Wireframe overlay, axes helper, and cell center markers as toggleable view options
-- Dark theme UI with blue accent color scheme
-- Pairwise collision detection and symmetric resolution to prevent cell overlap
-- AER coordinate system with automatic wrapping (azimuth) and clamping (elevation)
-- 23 automated tests covering cells, collisions, geometry, and full simulation pipeline
+---
 
 ## Project Structure
 
@@ -113,6 +184,8 @@ SCIAN_EVL_SpherSIM/
 └── requirements.txt              # Pinned Python dependencies
 ```
 
+---
+
 ## API Summary
 
 ### REST Endpoints
@@ -133,6 +206,14 @@ SCIAN_EVL_SpherSIM/
 | `ws://localhost:8002/ws/simulation` | Client to Server | `{ "action": "start" }`, `{ "action": "stop" }`, `{ "action": "speed", "value": 100 }` |
 | | Server to Client | JSON with `dfc_layer` (cells, step count) and `environment` (radius, velocity, bounds) |
 
+---
+
+## Port
+
+**8002** -- http://localhost:8002
+
+---
+
 ## Documentation
 
 - [Architecture](docs/architecture.md) -- System design, API endpoints, WebSocket protocol, data flow
@@ -147,63 +228,6 @@ SCIAN_EVL_SpherSIM/
 - **Frontend:** Three.js r128 (CDN), vanilla JavaScript, HTML5, CSS3
 - **Communication:** REST API (JSON) + WebSocket (JSON streaming)
 - **Testing:** 23 tests across 3 test files, run with plain Python (no framework required)
-
-## Mathematical Model
-
-### Haversine Great-Circle Distance
-
-The geodesic distance between two cells on the embryo sphere is computed using the Haversine formula:
-
-```
-d = 2 * arcsin(sqrt(sin^2(Delta_phi / 2) + cos(phi_1) * cos(phi_2) * sin^2(Delta_lambda / 2)))
-```
-
-where `phi` is elevation (latitude) and `lambda` is azimuth (longitude).
-
-### EVL Drag Force
-
-Each DFC is coupled to the advancing EVL margin by an exponentially decaying spring:
-
-```
-F_EVL = k * d * exp(-d / lambda)
-```
-
-where `k` is the coupling stiffness, `d` is the distance to the EVL margin, and `lambda` is the decay length scale.
-
-### Ring Confinement Force
-
-A lateral restoring force prevents DFCs from escaping the cluster azimuthally:
-
-```
-F_ring = -k_ring * Delta_az * exp(-d_margin / lambda)
-```
-
-where `Delta_az` is the azimuthal deviation from the cluster center and `d_margin` is the distance to the EVL margin.
-
-### Spherical Metric
-
-The surface line element on the embryo sphere of radius R:
-
-```
-ds^2 = R^2 * (d_theta^2 + cos^2(theta) * d_phi^2)
-```
-
-### Cluster Spread and Elongation
-
-Summary statistics for the DFC cluster geometry:
-
-```
-Spread:      sigma = sqrt(mean(d^2))
-Elongation:  e = sqrt(lambda_max / lambda_min)
-```
-
-where `d` is the great-circle distance of each cell from the cluster centroid, and `lambda_max`, `lambda_min` are the eigenvalues of the 2D inertia tensor of cell positions projected onto the tangent plane.
-
----
-
-## Port
-
-**8002** -- http://localhost:8002
 
 ---
 

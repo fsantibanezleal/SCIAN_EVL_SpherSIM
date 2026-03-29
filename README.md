@@ -14,15 +14,24 @@ During zebrafish epiboly, the EVL spreads vegetalward dragging DFCs through elas
 
 ---
 
-## KPIs & Metrics
+## KPIs — Impact & Value
 
-| Metric | Target | Current |
-|--------|--------|---------|
-| Geodesic distance | Exact on sphere | Haversine formula |
-| Collision resolution | Latitude-independent | Cartesian tangent-plane push |
-| EVL coupling | Distance-dependent | F=k·d·exp(−d/λ) spring |
-| Cluster metrics | Centroid, spread, elongation | Real-time computation |
-| Test coverage | Comprehensive | 24 tests passing |
+| KPI | Impact |
+|-----|--------|
+| Geometric accuracy | First web-based simulator with geodesic-correct spherical mechanics |
+| Platform migration | From MATLAB (license required) to Python (free, open source) |
+| 3D interaction | Interactive Three.js orbit/zoom vs static MATLAB plots |
+| Quantitative analysis | Real-time cluster metrics (spread, elongation) + CSV export |
+
+## Project Metrics & Status
+
+| Metric | Status |
+|--------|--------|
+| Tests | 24 passing |
+| Collision resolution | Cartesian tangent-plane push (latitude-independent) |
+| EVL coupling | Exponential spring F=k·d·exp(−d/λ) |
+| Cell division | Stochastic on sphere with area conservation |
+| Cluster metrics | Centroid, spread σ, elongation √(λ_max/λ_min) |
 
 ---
 

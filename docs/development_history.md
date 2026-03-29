@@ -36,7 +36,7 @@ This gives physically correct, latitude-independent separation distances.
 
 **Also applied to**: Differential adhesion forces, which suffered from the same metric distortion.
 
-> See `docs/diagrams/architecture.svg` for visual reference.
+> See `docs/svg/architecture.svg` for visual reference.
 
 ### New: EVL-DFC Elastic Spring Coupling
 
@@ -176,7 +176,6 @@ Complete rewrite of the simulation platform from MATLAB to a modern Python web s
 - Three.js r128 (loaded from CDN), vanilla JavaScript, HTML5, CSS3
 - Communication via REST (JSON) and WebSocket (JSON streaming)
 
-> See `docs/diagrams/architecture.svg` and `docs/diagrams/cell_model.svg` for visual reference.
 
 ---
 

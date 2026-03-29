@@ -23,19 +23,27 @@ During zebrafish epiboly, the EVL spreads vegetalward dragging DFCs through elas
 | 3D interaction | Interactive Three.js orbit/zoom vs static MATLAB plots |
 | Quantitative analysis | Real-time cluster metrics (spread, elongation) + CSV export |
 
-## Project Metrics & Status
+## Spherical Embryo Model
 
-| Metric | Status |
-|--------|--------|
-| Tests | 24 passing |
-| Collision resolution | Cartesian tangent-plane push (latitude-independent) |
-| EVL coupling | Exponential spring F=k·d·exp(−d/λ) |
-| Cell division | Stochastic on sphere with area conservation |
-| Cluster metrics | Centroid, spread σ, elongation √(λ_max/λ_min) |
+![Spherical Model](docs/svg/spherical_model.svg)
+
+The embryo is modeled as a sphere. DFC cells are represented as circular contours on the sphere surface, tracked in AER (Azimuth-Elevation-Radius) coordinates. The EVL margin is a latitude line that moves steadily toward the vegetal pole, dragging the DFC cluster along with it.
 
 ---
 
-## Mathematical Model
+## Application
+
+![App](docs/svg/app_screenshot.svg)
+
+The browser interface provides a 3D viewport with orbit controls (rotate, pan, zoom) and a right-side panel for simulation parameters and playback controls.
+
+## Frontend
+
+![Frontend](docs/png/frontend.png)
+
+---
+
+## Technical Approach — Spherical Mechanics
 
 ### Geodesic Distance — Haversine Formula
 On a sphere, the straight-line distance between two cells is meaningless — we need the great-circle (geodesic) distance:
@@ -85,26 +93,6 @@ where **d** is the great-circle distance of each cell from the cluster centroid,
 
 ---
 
-## Spherical Embryo Model
-
-![Spherical Model](docs/svg/spherical_model.svg)
-
-The embryo is modeled as a sphere. DFC cells are represented as circular contours on the sphere surface, tracked in AER (Azimuth-Elevation-Radius) coordinates. The EVL margin is a latitude line that moves steadily toward the vegetal pole, dragging the DFC cluster along with it.
-
----
-
-## Application
-
-![App](docs/svg/app_screenshot.svg)
-
-The browser interface provides a 3D viewport with orbit controls (rotate, pan, zoom) and a right-side panel for simulation parameters and playback controls.
-
-## Frontend
-
-![Frontend](docs/png/frontend.png)
-
----
-
 ## Architecture
 
 ![Architecture](docs/svg/architecture.svg)
@@ -125,6 +113,16 @@ The system consists of a FastAPI server that runs the simulation engine and a Th
 - Pairwise collision detection and symmetric resolution to prevent cell overlap
 - AER coordinate system with automatic wrapping (azimuth) and clamping (elevation)
 - 23 automated tests covering cells, collisions, geometry, and full simulation pipeline
+
+## Project Metrics & Status
+
+| Metric | Status |
+|--------|--------|
+| Tests | 24 passing |
+| Collision resolution | Cartesian tangent-plane push (latitude-independent) |
+| EVL coupling | Exponential spring F=k·d·exp(−d/λ) |
+| Cell division | Stochastic on sphere with area conservation |
+| Cluster metrics | Centroid, spread σ, elongation √(λ_max/λ_min) |
 
 ---
 

@@ -28,54 +28,51 @@ During zebrafish epiboly, the EVL spreads vegetalward dragging DFCs through elas
 
 ## Mathematical Model
 
-### Haversine Great-Circle Distance
-
-The geodesic distance between two cells on the embryo sphere is computed using the Haversine formula:
-
-```
-d = 2 * arcsin(sqrt(sin^2(Delta_phi / 2) + cos(phi_1) * cos(phi_2) * sin^2(Delta_lambda / 2)))
-```
-
-where `phi` is elevation (latitude) and `lambda` is azimuth (longitude).
-
-### EVL Drag Force
-
-Each DFC is coupled to the advancing EVL margin by an exponentially decaying spring:
+### Geodesic Distance — Haversine Formula
+On a sphere, the straight-line distance between two cells is meaningless — we need the great-circle (geodesic) distance:
 
 ```
-F_EVL = k * d * exp(-d / lambda)
+d = 2 · arcsin(√(sin²(Δφ/2) + cos(φ₁)·cos(φ₂)·sin²(Δλ/2)))
 ```
 
-where `k` is the coupling stiffness, `d` is the distance to the EVL margin, and `lambda` is the decay length scale.
+where **φ** is elevation (latitude), **λ** is azimuth (longitude), and **d** is in radians. This is numerically stable for both small and large separations, unlike the flat approximation √(Δaz² + Δel²) which fails near the poles.
 
-### Ring Confinement Force
-
-A lateral restoring force prevents DFCs from escaping the cluster azimuthally:
+### EVL Elastic Coupling
+DFCs maintain tight-junction attachments to the EVL, modeled as exponentially decaying springs:
 
 ```
-F_ring = -k_ring * Delta_az * exp(-d_margin / lambda)
+F_EVL = k · d · exp(−d / λ)
 ```
 
-where `Delta_az` is the azimuthal deviation from the cluster center and `d_margin` is the distance to the EVL margin.
+where **k** is the spring constant, **d** is the cell-to-margin distance, and **λ ≈ 0.3 rad** is the decay length. Leader cells (close to EVL) feel strong pull; follower cells (far) feel weak pull — matching biological observations.
+
+### YSL Ring Contraction
+The yolk syncytial layer has an actomyosin ring that pulls DFCs azimuthally toward the cluster centroid:
+
+```
+F_ring = −k_ring · Δaz · exp(−d_margin / λ_ring)
+```
+
+This compacts the cluster laterally as it migrates vegetalward.
 
 ### Spherical Metric
-
-The surface line element on the embryo sphere of radius R:
+The non-uniform metric on the sphere means equal azimuthal increments produce different physical distances at different latitudes:
 
 ```
-ds^2 = R^2 * (d_theta^2 + cos^2(theta) * d_phi^2)
+ds² = R²(dθ² + cos²(θ) · dφ²)
 ```
+
+At the equator cos(0)=1 (full distance); at 60° latitude cos(60°)=0.5 (half distance). Collision resolution must account for this — we use Cartesian tangent-plane push instead of AER-space push.
 
 ### Cluster Spread and Elongation
-
-Summary statistics for the DFC cluster geometry:
+Summary statistics characterize how compact or elongated the DFC cluster is during migration:
 
 ```
-Spread:      sigma = sqrt(mean(d^2))
-Elongation:  e = sqrt(lambda_max / lambda_min)
+Spread:      σ = √(mean(d²))
+Elongation:  e = √(λ_max / λ_min)
 ```
 
-where `d` is the great-circle distance of each cell from the cluster centroid, and `lambda_max`, `lambda_min` are the eigenvalues of the 2D inertia tensor of cell positions projected onto the tangent plane.
+where **d** is the great-circle distance of each cell from the cluster centroid, and **λ_max**, **λ_min** are the eigenvalues of the 2D inertia tensor of cell positions projected onto the tangent plane. An elongation of 1.0 means circular; values above 2.0 indicate a stretched, leader-follower configuration.
 
 ---
 

@@ -61,38 +61,38 @@ python -m uvicorn app.main:app --reload --port 8002
 
 ```
 SCIAN_EVL_SpherSIM/
-  app/
-    main.py                   FastAPI application, REST + WebSocket endpoints
-    simulation/
-      cell_dfc.py             Individual DFC cell model (AER position, contour, update)
-      layer_dfc.py            DFC population management (grid init, collective update)
-      layer_evl.py            EVL margin kinematic model (latitude moves vegetalward)
-      environment.py          Global parameters (radius, speed, bounds, noise)
-      collision.py            Pairwise collision detection and resolution
-      geometry.py             Coordinate conversions, great-circle distance, mesh generation
-    api/
-      routes.py               Reserved for future endpoint expansion
-    static/
-      index.html              Single-page application shell
-      css/style.css           Dark theme stylesheet
-      js/
-        app.js                Orchestration: binds controls, renderer, WebSocket
-        renderer3d.js         Three.js scene: sphere, contours, orbit controls
-        controls.js           Parameter panel and status display
-        websocket.js          WebSocket client with auto-reconnect
-  tests/
-    test_cell.py              10 tests: cell creation, update, wrapping, serialization
-    test_collision.py         7 tests: distance, overlap, resolution, symmetry
-    test_simulation.py        6 tests: pipeline, serialization, geometry, bounds
-  docs/
-    architecture.md           System design and API reference
-    biological_model.md       Zebrafish biology and simulation model
-    development_history.md    Changelog from MATLAB v1.x to Python v2.0
-    references.md             Academic papers and software libraries
-    user_guide.md             Installation, usage, and troubleshooting
-    svg/                      Diagrams (architecture, model, flow, coordinates, app)
-  legacy/                     Original MATLAB code and GUIDE files
-  requirements.txt            Pinned Python dependencies
+├── app/
+│   ├── main.py                   # FastAPI application, REST + WebSocket endpoints
+│   ├── simulation/
+│   │   ├── cell_dfc.py           # Individual DFC cell model (AER position, contour, update)
+│   │   ├── layer_dfc.py          # DFC population management (grid init, collective update)
+│   │   ├── layer_evl.py          # EVL margin kinematic model (latitude moves vegetalward)
+│   │   ├── environment.py        # Global parameters (radius, speed, bounds, noise)
+│   │   ├── collision.py          # Pairwise collision detection and resolution
+│   │   └── geometry.py           # Coordinate conversions, great-circle distance, mesh generation
+│   ├── api/
+│   │   └── routes.py             # Reserved for future endpoint expansion
+│   └── static/
+│       ├── index.html            # Single-page application shell
+│       ├── css/style.css         # Dark theme stylesheet
+│       └── js/
+│           ├── app.js            # Orchestration: binds controls, renderer, WebSocket
+│           ├── renderer3d.js     # Three.js scene: sphere, contours, orbit controls
+│           ├── controls.js       # Parameter panel and status display
+│           └── websocket.js      # WebSocket client with auto-reconnect
+├── tests/
+│   ├── test_cell.py              # 10 tests: cell creation, update, wrapping, serialization
+│   ├── test_collision.py         # 7 tests: distance, overlap, resolution, symmetry
+│   └── test_simulation.py        # 6 tests: pipeline, serialization, geometry, bounds
+├── docs/
+│   ├── architecture.md           # System design and API reference
+│   ├── biological_model.md       # Zebrafish biology and simulation model
+│   ├── development_history.md    # Changelog from MATLAB v1.x to Python v2.0
+│   ├── references.md             # Academic papers and software libraries
+│   ├── user_guide.md             # Installation, usage, and troubleshooting
+│   └── svg/                      # Diagrams (architecture, model, flow, coordinates, app)
+├── legacy/                       # Original MATLAB code and GUIDE files
+└── requirements.txt              # Pinned Python dependencies
 ```
 
 ## API Summary
@@ -129,6 +129,74 @@ SCIAN_EVL_SpherSIM/
 - **Frontend:** Three.js r128 (CDN), vanilla JavaScript, HTML5, CSS3
 - **Communication:** REST API (JSON) + WebSocket (JSON streaming)
 - **Testing:** 23 tests across 3 test files, run with plain Python (no framework required)
+
+## Mathematical Model
+
+### Haversine Great-Circle Distance
+
+The geodesic distance between two cells on the embryo sphere is computed using the Haversine formula:
+
+```
+d = 2 * arcsin(sqrt(sin^2(Delta_phi / 2) + cos(phi_1) * cos(phi_2) * sin^2(Delta_lambda / 2)))
+```
+
+where `phi` is elevation (latitude) and `lambda` is azimuth (longitude).
+
+### EVL Drag Force
+
+Each DFC is coupled to the advancing EVL margin by an exponentially decaying spring:
+
+```
+F_EVL = k * d * exp(-d / lambda)
+```
+
+where `k` is the coupling stiffness, `d` is the distance to the EVL margin, and `lambda` is the decay length scale.
+
+### Ring Confinement Force
+
+A lateral restoring force prevents DFCs from escaping the cluster azimuthally:
+
+```
+F_ring = -k_ring * Delta_az * exp(-d_margin / lambda)
+```
+
+where `Delta_az` is the azimuthal deviation from the cluster center and `d_margin` is the distance to the EVL margin.
+
+### Spherical Metric
+
+The surface line element on the embryo sphere of radius R:
+
+```
+ds^2 = R^2 * (d_theta^2 + cos^2(theta) * d_phi^2)
+```
+
+### Cluster Spread and Elongation
+
+Summary statistics for the DFC cluster geometry:
+
+```
+Spread:      sigma = sqrt(mean(d^2))
+Elongation:  e = sqrt(lambda_max / lambda_min)
+```
+
+where `d` is the great-circle distance of each cell from the cluster centroid, and `lambda_max`, `lambda_min` are the eigenvalues of the 2D inertia tensor of cell positions projected onto the tangent plane.
+
+---
+
+## Port
+
+**8002** -- http://localhost:8002
+
+---
+
+## References
+
+- Oteiza et al. (2008). Origin and shaping of the laterality organ in zebrafish. *Development*, 135(16).
+- Ablooglu et al. (2021). Apical contacts stemming from incomplete delamination. *eLife*, 10:e61495.
+- Vincenty, T. (1975). Direct and inverse solutions of geodesics on the ellipsoid. *Survey Review*, 23(176).
+- Rieu et al. (2000). Diffusion and deformations of single Hydra cells. *Biophysical Journal*, 79(4).
+
+---
 
 ## License
 

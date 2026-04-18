@@ -160,6 +160,19 @@
         <!-- Right: 3D viewport -->
         <main id="viewport">
             <canvas id="three-canvas"></canvas>
+            <!-- Keyboard / mouse hints overlay -->
+            <div id="viewport-hints" class="viewport-hints" title="Keyboard and mouse shortcuts">
+                <div class="hint-row"><kbd>Space</kbd> play / pause</div>
+                <div class="hint-row"><kbd>S</kbd> single step</div>
+                <div class="hint-row"><kbd>I</kbd> init / reset</div>
+                <div class="hint-row"><kbd>?</kbd> open help</div>
+                <div class="hint-row"><kbd>Esc</kbd> close help</div>
+                <div class="hint-sep"></div>
+                <div class="hint-row">LMB drag: orbit</div>
+                <div class="hint-row">RMB drag: pan</div>
+                <div class="hint-row">Wheel: zoom</div>
+                <button id="btn-hints-toggle" class="hints-toggle" title="Hide / show hints">-</button>
+            </div>
         </main>
     </div>
 
@@ -224,6 +237,55 @@
                     }
                 }
             });
+        });
+    })();
+    </script>
+
+    <!-- Keyboard shortcuts and viewport hints collapse -->
+    <script>
+    (function () {
+        var hints = document.getElementById('viewport-hints');
+        var btnToggle = document.getElementById('btn-hints-toggle');
+        if (btnToggle && hints) {
+            btnToggle.addEventListener('click', function (e) {
+                e.stopPropagation();
+                hints.classList.toggle('hints-collapsed');
+                btnToggle.textContent = hints.classList.contains('hints-collapsed') ? '+' : '-';
+            });
+        }
+
+        // Keyboard shortcuts. Ignore when user is typing in an input.
+        document.addEventListener('keydown', function (e) {
+            var tag = (e.target && e.target.tagName) || '';
+            if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return;
+            if (e.ctrlKey || e.metaKey || e.altKey) return;
+
+            var modal = document.getElementById('help-modal');
+            var btnInit  = document.getElementById('btn-init');
+            var btnPlay  = document.getElementById('btn-play');
+            var btnPause = document.getElementById('btn-pause');
+            var btnStep  = document.getElementById('btn-step');
+            var btnHelp  = document.getElementById('btn-help');
+
+            switch (e.key) {
+                case ' ':
+                    e.preventDefault();
+                    // Toggle based on which button is enabled
+                    if (btnPause && !btnPause.disabled) { btnPause.click(); }
+                    else if (btnPlay && !btnPlay.disabled) { btnPlay.click(); }
+                    break;
+                case 's':
+                case 'S':
+                    if (btnStep && !btnStep.disabled) btnStep.click();
+                    break;
+                case 'i':
+                case 'I':
+                    if (btnInit && !btnInit.disabled) btnInit.click();
+                    break;
+                case '?':
+                    if (btnHelp) btnHelp.click();
+                    break;
+            }
         });
     })();
     </script>

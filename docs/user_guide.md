@@ -121,6 +121,18 @@ The viewport supports standard Three.js OrbitControls:
 
 You can also use touch gestures on mobile devices (one finger to rotate, two fingers to pan/pinch to zoom).
 
+### Keyboard Shortcuts
+
+| Key | Action |
+|---|---|
+| **Space** | Toggle Play / Pause |
+| **S** | Single step (advance one frame) |
+| **I** | Init / reset simulation with current parameters |
+| **?** | Open the help modal |
+| **Esc** | Close the help modal |
+
+A small overlay in the bottom-left of the viewport lists these shortcuts at runtime. Click the `-` button on the overlay to collapse it (or `+` to restore). Shortcuts are ignored while the focus is inside an input field, so parameter editing is not affected.
+
 ## Running the Tests
 
 The project includes 23 tests organized into three test files. Run them from the project root:

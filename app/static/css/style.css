@@ -340,3 +340,70 @@ button:disabled {
 ::-webkit-scrollbar-thumb:hover {
     background: var(--text-secondary);
 }
+
+/* ---- Viewport keyboard hints overlay ---- */
+#viewport { position: relative; }
+
+.viewport-hints {
+    position: absolute;
+    left: 12px;
+    bottom: 12px;
+    background: rgba(13, 21, 32, 0.78);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 8px 10px;
+    font-size: 11px;
+    color: var(--text-secondary);
+    line-height: 1.5;
+    pointer-events: auto;
+    z-index: 10;
+    min-width: 140px;
+    backdrop-filter: blur(3px);
+}
+
+.viewport-hints .hint-row { display: block; white-space: nowrap; }
+.viewport-hints .hint-sep {
+    height: 1px;
+    background: var(--border);
+    margin: 6px 0;
+    opacity: 0.6;
+}
+
+.viewport-hints kbd {
+    display: inline-block;
+    background: #1a2538;
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    padding: 1px 5px;
+    font-family: monospace;
+    font-size: 10px;
+    color: #9fc6f0;
+    margin-right: 4px;
+    min-width: 18px;
+    text-align: center;
+}
+
+.viewport-hints.hints-collapsed .hint-row,
+.viewport-hints.hints-collapsed .hint-sep {
+    display: none;
+}
+
+.viewport-hints.hints-collapsed {
+    min-width: 0;
+    padding: 2px 6px;
+}
+
+.hints-toggle {
+    position: absolute;
+    top: 2px;
+    right: 4px;
+    background: transparent;
+    border: none;
+    color: var(--text-secondary);
+    cursor: pointer;
+    padding: 0 4px;
+    font-size: 14px;
+    line-height: 1;
+}
+
+.hints-toggle:hover { color: var(--accent); }

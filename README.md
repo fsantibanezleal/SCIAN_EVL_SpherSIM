@@ -99,6 +99,12 @@ where **d** is the great-circle distance of each cell from the cluster centroid,
 
 The system consists of a FastAPI server that runs the simulation engine and a Three.js frontend that renders the results in real time. Communication happens over REST (for initialization and control) and WebSocket (for continuous state streaming during playback).
 
+## Pipeline
+
+![Pipeline](docs/svg/pipeline.svg)
+
+Per-tick processing flow: (1) initialize cells, (2) update positions with EVL velocity + noise, (3) detect pairwise collisions, (4) resolve overlaps on the tangent plane, (5) convert to Cartesian, (6) serialize state, (7) push to the Three.js renderer over WebSocket.
+
 ---
 
 ## Features
@@ -178,23 +184,25 @@ SCIAN_EVL_SpherSIM/
 │   ├── test_collision.py         # 7 tests: distance, overlap, resolution, symmetry
 │   └── test_simulation.py        # 6 tests: pipeline, serialization, geometry, bounds
 ├── docs/
-│   ├── architecture.md           # System design and API reference
-│   ├── biological_model.md       # Zebrafish biology and simulation model
-│   ├── epiboly_biology.md        # Epiboly process biology
-│   ├── development_history.md    # Changelog from MATLAB v1.x to Python v2.0
-│   ├── references.md             # Academic papers and software libraries
-│   ├── user_guide.md             # Installation, usage, and troubleshooting
+│   ├── architecture.md                  # System design and API reference
+│   ├── spherical_mechanics_theory.md    # Deep theory: metric, Haversine, forces, metrics
+│   ├── biological_model.md              # Zebrafish biology and simulation model
+│   ├── epiboly_biology.md               # Epiboly process biology
+│   ├── development_history.md           # Changelog from MATLAB v1.x to Python v2.x
+│   ├── references.md                    # Academic papers and software libraries
+│   ├── user_guide.md                    # Installation, usage, and troubleshooting
 │   ├── png/
-│   │   └── frontend.png          # Frontend screenshot
+│   │   └── frontend.png                 # Frontend screenshot
 │   └── svg/
-│       ├── architecture.svg      # System architecture diagram
-│       ├── spherical_model.svg   # Spherical embryo model
-│       ├── simulation_flow.svg   # Simulation step pipeline
-│       ├── coordinate_system.svg # AER coordinate system
-│       ├── cartesian_push.svg    # Cartesian push collision diagram
-│       ├── epiboly_stages.svg    # Epiboly progression stages
-│       ├── evl_coupling.svg      # EVL drag coupling diagram
-│       └── app_screenshot.svg    # Application interface mockup
+│       ├── architecture.svg             # System architecture diagram
+│       ├── pipeline.svg                 # Per-tick processing pipeline
+│       ├── simulation_flow.svg          # (legacy) simulation step pipeline
+│       ├── spherical_model.svg          # Spherical embryo model
+│       ├── coordinate_system.svg        # AER coordinate system
+│       ├── cartesian_push.svg           # Cartesian push collision diagram
+│       ├── epiboly_stages.svg           # Epiboly progression stages
+│       ├── evl_coupling.svg             # EVL drag coupling diagram
+│       └── app_screenshot.svg           # Application interface mockup
 ├── legacy/                       # Original MATLAB code and GUIDE files
 ├── build.spec                    # PyInstaller spec file
 ├── Build_PyInstaller.ps1         # PowerShell build script
@@ -235,7 +243,9 @@ SCIAN_EVL_SpherSIM/
 ## Documentation
 
 - [Architecture](docs/architecture.md) -- System design, API endpoints, WebSocket protocol, data flow
+- [Spherical Mechanics Theory](docs/spherical_mechanics_theory.md) -- Deep equations reference: metric, Haversine, Cartesian push, EVL coupling, metrics
 - [Biological Model](docs/biological_model.md) -- Zebrafish biology, DFC migration, collision model
+- [Epiboly Biology](docs/epiboly_biology.md) -- Epiboly process and DFC context
 - [Development History](docs/development_history.md) -- Changelog from MATLAB to Python/Web
 - [References](docs/references.md) -- Academic papers and software libraries
 - [User Guide](docs/user_guide.md) -- Installation, usage, parameters, troubleshooting

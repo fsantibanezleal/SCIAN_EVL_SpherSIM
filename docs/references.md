@@ -59,3 +59,18 @@
 
 10. **Bruce AEE.** (2016). Zebrafish epiboly: Spreading thin over the yolk. *Developmental Dynamics*, 245(3), 244-258.
     - A detailed review focused specifically on zebrafish epiboly mechanisms, covering the roles of EVL tension, YSL actomyosin contractility, deep cell intercalation, and E-cadherin adhesion. Provides the mechanical framework that motivates treating the EVL as a kinematic boundary in this simulation.
+
+11. **Solnica-Krezel L.** (2006). Gastrulation in zebrafish — all just about adhesion? *Current Opinion in Genetics & Development*, 16(4), 433-441.
+    - Discusses how differential cadherin-mediated adhesion coordinates the large-scale rearrangements of gastrulation, including the interactions between the EVL, YSL, and deep cell populations. Supports the use of differential-adhesion terms in the simulation's collision and cluster-cohesion model.
+
+12. **Kimmel CB, Ballard WW, Kimmel SR, Ullmann B, Schilling TF.** (1995). Stages of embryonic development of the zebrafish. *Developmental Dynamics*, 203(3), 253-310.
+    - Canonical staging atlas used throughout the field. Defines the epiboly stages (30%, 50%, 75%, 90%, 100%) referenced by `docs/svg/epiboly_stages.svg` and by the EVL margin elevation schedule in `layer_evl.py`.
+
+13. **Cooper MS, D'Amico LA.** (1996). A cluster of noninvoluting endocytic cells at the margin of the zebrafish blastoderm marks the site of embryonic shield formation. *Developmental Biology*, 180(1), 184-198.
+    - Original identification of the dorsal-forerunner cell (DFC) cluster as a distinct, non-involuting population. This is the foundational paper that defines the biological object this simulation models.
+
+14. **Amack JD, Yost HJ.** (2004). The T box transcription factor no tail in ciliated cells controls zebrafish left-right asymmetry. *Current Biology*, 14(8), 685-690.
+    - Establishes the functional link between DFCs, Kupffer's vesicle, and left-right asymmetry (situs inversus when DFCs are disrupted). Motivates why correct DFC migration is biomedically relevant and not just a developmental-biology curiosity.
+
+15. **Wang X, Merkel M, Sutter LB, Erdemci-Tandogan G, Manning ML, Kasza KE.** (2024). Anisotropy links cell shapes to tissue flow during convergent extension. *Nature Physics*, 20(1), 127-135.
+    - A modern computational-morphogenesis reference showing how anisotropic cell shape drives collective tissue flow on curved substrates. Relevant for extending the current isotropic contour model (`cell_dfc.py`) toward shape-anisotropic cells in future versions.

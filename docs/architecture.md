@@ -98,7 +98,7 @@ The original implementation of this simulation was written in MATLAB using the G
 
 ## Data Flow
 
-![Simulation Pipeline](svg/simulation_flow.svg)
+![Simulation Pipeline](svg/pipeline.svg)
 
 The complete data flow for a typical user session:
 

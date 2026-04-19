@@ -1,5 +1,23 @@
 # Development History
 
+## v2.3.1 (2026-04-18) -- Heavy Cycle #2: Docs Consolidation
+
+### SVG Deduplication
+`docs/svg/simulation_flow.svg` and `docs/svg/pipeline.svg` were byte-identical after the v2.3.0 heavy cycle (the pipeline SVG was authored per `project-quality-standards.md` without retiring the legacy file). This cycle:
+
+- Deletes `docs/svg/simulation_flow.svg`.
+- Retargets `docs/architecture.md` to `docs/svg/pipeline.svg`.
+- Updates the README project-structure tree to drop the legacy entry.
+- External references (blog posts, lab-meeting slides, social media) were considered out of scope for internal repo hygiene; if broken links surface, restoring `simulation_flow.svg` as a symlink or redirect is cheap (one `git revert`).
+
+### Port Assignment Section
+README gains an explicit `### Port Assignment` subsection under Getting Started with a link to the global port ledger at `CAOS_MANAGE infrastructure/vps/hetzner-fasl-prod/README.md`, matching the sibling SCIAN/FASL projects. The bare `## Port` heading is removed.
+
+### References Expansion
+`docs/references.md` grows from 10 to 15 canonical entries: Solnica-Krezel 2006 (differential adhesion), Kimmel 1995 (developmental staging), Cooper & D'Amico 1996 (original DFC identification), Amack & Yost 2004 (DFC-to-laterality link), Wang et al. 2024 (anisotropic tissue flow on curved surfaces). Each has a 1-2 line original-description annotation as required by `project-quality-standards.md`.
+
+---
+
 ## v2.2.0 (2026-03-26) -- Spherical Mechanics Rewrite
 
 ### Critical Fix: Cartesian Collision Resolution

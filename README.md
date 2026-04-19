@@ -150,6 +150,12 @@ python -m uvicorn app.main:app --reload --port 8002
 # Open http://localhost:8002
 ```
 
+### Port Assignment
+
+**Port:** `8002` -- http://localhost:8002
+
+This project is registered in the global port ledger at [CAOS_MANAGE infrastructure/vps/hetzner-fasl-prod/README.md](../../_Web_Projects/CAOS_MANAGE/infrastructure/vps/hetzner-fasl-prod/README.md). Port 8002 was allocated to SpherSIM to avoid collisions with sibling SCIAN/FASL science projects (LEO_CPM 8001, DinHot 8003, DualFotography 8004, SOFI_QDOTS 8005, 3D_Distance_Profiler 8008, 3D_GrainSize 8010). Any change must be reflected in the ledger first.
+
 ---
 
 ## Project Structure
@@ -196,7 +202,6 @@ SCIAN_EVL_SpherSIM/
 │   └── svg/
 │       ├── architecture.svg             # System architecture diagram
 │       ├── pipeline.svg                 # Per-tick processing pipeline
-│       ├── simulation_flow.svg          # (legacy) simulation step pipeline
 │       ├── spherical_model.svg          # Spherical embryo model
 │       ├── coordinate_system.svg        # AER coordinate system
 │       ├── cartesian_push.svg           # Cartesian push collision diagram
@@ -231,12 +236,6 @@ SCIAN_EVL_SpherSIM/
 |---|---|---|
 | `ws://localhost:8002/ws/simulation` | Client to Server | `{ "action": "start" }`, `{ "action": "stop" }`, `{ "action": "speed", "value": 100 }` |
 | | Server to Client | JSON with `dfc_layer` (cells, step count) and `environment` (radius, velocity, bounds) |
-
----
-
-## Port
-
-**8002** -- http://localhost:8002
 
 ---
 

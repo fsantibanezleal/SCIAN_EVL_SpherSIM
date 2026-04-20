@@ -26,6 +26,7 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse, StreamingResponse
 from pydantic import BaseModel
 
+from . import __version__
 from .simulation.layer_dfc import DFCLayer
 from .simulation.environment import SphericalEnvironment
 
@@ -33,10 +34,12 @@ from .simulation.environment import SphericalEnvironment
 # App setup
 # ---------------------------------------------------------------------------
 
+APP_TITLE = "SCIAN EVL SpherSIM"
+
 app = FastAPI(
-    title="SCIAN EVL SpherSIM",
+    title=APP_TITLE,
     description="3D spherical simulation of embryonic cell migration",
-    version="2.0.0",
+    version=__version__,
 )
 
 static_dir = Path(__file__).parent / "static"
@@ -78,6 +81,27 @@ class SimConfig(BaseModel):
 async def root():
     """Serve the single-page application."""
     return FileResponse(str(static_dir / "index.html"))
+
+
+@app.get("/api/health")
+async def health():
+    """Lightweight liveness probe.
+
+    Returns a stable ``{"status": "ok"}`` payload with HTTP 200. Intended
+    for uptime monitors, cPanel health-checks, and local smoke tests.
+    """
+    return {"status": "ok"}
+
+
+@app.get("/api/version")
+async def version():
+    """Expose the deployed application version.
+
+    Sources the version string from :data:`app.__version__` (single source
+    of truth) and the service name from the FastAPI ``title``. Useful for
+    verifying which build is running in a given environment.
+    """
+    return {"version": __version__, "name": APP_TITLE}
 
 
 @app.post("/api/simulation/init")

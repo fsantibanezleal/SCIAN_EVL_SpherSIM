@@ -1,5 +1,8 @@
 # SCIAN EVL SpherSIM
 
+[![License](https://img.shields.io/github/license/fsantibanezleal/SCIAN_EVL_SpherSIM)](LICENSE)
+[![Live demo](https://img.shields.io/badge/demo-live-2ea44f)](https://sphersim.fasl-work.com)
+
 3D simulation of Deep Forming Cell (DFC) collective migration on a spherical zebrafish embryo surface during epiboly. Built with Python/FastAPI on the backend and Three.js for interactive browser-based 3D visualization.
 
 DFCs are the precursor cells of Kupffer's vesicle, the zebrafish organ responsible for establishing left-right body asymmetry. This simulation models how DFCs are carried vegetalward by the advancing EVL (Enveloping Layer) margin, subject to stochastic noise and inter-cell collision constraints. The project is a complete rewrite of a legacy MATLAB implementation, designed for accessibility, real-time interactivity, and modularity.
